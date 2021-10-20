@@ -1,4 +1,4 @@
-package com.gwnu_gym;
+package com.gwnu.gym;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;
