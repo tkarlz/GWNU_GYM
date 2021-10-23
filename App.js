@@ -20,6 +20,24 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2, // IOS
     shadowRadius: 1, //IOS
     elevation: 8, // Android
+  },
+  loginButtonText: {
+    color: 'white', 
+    paddingVertical: 8, 
+    paddingHorizontal: 10, 
+    fontSize: 16, 
+    fontWeight: "bold"
+  },
+  logoTitle: {
+    flexDirection: "row", 
+    alignItems: "center", 
+    flex: 1 
+  },
+  logoTitleText: {
+    marginStart: 10, 
+    fontSize: 20, 
+    color: root.TextColor, 
+    fontWeight: "bold"
   }
 });
 
@@ -30,9 +48,9 @@ const Main = ({ navigation }) => {
 
   const LogoTitle = () => {
     return (
-      <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+      <View style={styles.logoTitle}>
         <WithLocalSvg width={30} height={30} asset={LogoSvg}/>
-        <Text style={{ marginStart: 10, fontSize: 20, color: root.TextColor, fontWeight: "bold"}}>
+        <Text style={styles.logoTitleText}>
           체육 시설물 통합 예약
         </Text>
       </View>
@@ -46,7 +64,7 @@ const Main = ({ navigation }) => {
         style={styles.loginButton}
         onPress={onPress}
       >
-        <Text style={{ color: '#000000', paddingVertical: 8, paddingHorizontal: 10, fontSize: 16, fontWeight: "bold" }}>로그인</Text>
+        <Text style={styles.loginButtonText}>로그인</Text>
       </TouchableOpacity> 
     )
   }

@@ -136,6 +136,8 @@ captures/
 google-services.json
 GoogleService-Info.plist
 
+PrivateData.js
+
 # Freeline
 freeline.py
 freeline/
