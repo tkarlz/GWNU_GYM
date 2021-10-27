@@ -1,32 +1,32 @@
 import React, { useEffect } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Text from './fuctions/GwnuText'
 import ReservationListScreen from './src/ReservationListScreen'
 import LoginScreen from './src/LoginScreen'
 import MyPageScreen from './src/MyPageScreen'
 import { WithLocalSvg } from 'react-native-svg';
 import LogoSvg from './assets/logo.svg'
-import * as root from './rootValue'
+import { GwnuYellow, GwnuPurple } from './fuctions/GwnuColor'
 
 const styles = StyleSheet.create({
   loginButton: {
-    backgroundColor: root.GwnuYellow, 
+    backgroundColor: GwnuYellow, 
     borderRadius: 5, 
     shadowColor: 'black', // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
     shadowOpacity: 0.2, // IOS
     shadowRadius: 1, //IOS
-    elevation: 8, // Android
+    elevation: 5, // Android
   },
   loginButtonText: {
     color: 'white', 
     paddingVertical: 8, 
     paddingHorizontal: 10, 
-    fontSize: 16, 
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   logoTitle: {
     flexDirection: "row", 
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
   logoTitleText: {
     marginStart: 10, 
     fontSize: 20, 
-    color: root.TextColor, 
     fontWeight: "bold"
   }
 });
@@ -90,7 +89,7 @@ const Main = ({ navigation }) => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: root.GwnuPurple,
+        tabBarActiveTintColor: GwnuPurple,
         tabBarInactiveTintColor: 'gray',
       })}
     >

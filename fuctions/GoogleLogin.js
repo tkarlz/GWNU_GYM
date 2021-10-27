@@ -50,7 +50,7 @@ const SignOut = async () => {
     }
 }
 
-const Logininit = () => {
+const LoginConfigure = () => {
     GoogleSignin.configure({
         webClientId: webClientId, 
         offlineAccess: true, 
@@ -73,6 +73,6 @@ const LoginButton = (props) => {
 export {
     SignIn,
     SignOut,
-    Logininit,
+    LoginConfigure,
     LoginButton
 };

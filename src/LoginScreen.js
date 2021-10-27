@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { Logininit, LoginButton } from '../fuctions/GoogleLogin'
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import * as root from '../rootValue'
+import { View, StyleSheet } from 'react-native';
+import Text from '../fuctions/GwnuText'
+import { LoginConfigure, LoginButton } from '../fuctions/GoogleLogin'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { GwnuBeige, GwnuYellow, LightenColor } from '../fuctions/GwnuColor'
 
 const styles = StyleSheet.create({
   rootView: {
@@ -10,43 +11,40 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   infoView: {
-    backgroundColor: root.GwnuBeige,
+    backgroundColor: GwnuBeige,
     borderRadius: 5,
     marginHorizontal: 30, 
     marginVertical: 50,
     shadowColor: 'black', // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
     shadowOpacity: 0.2, // IOS
-    shadowRadius: 1, //IOS
-    elevation: 8, // Android
+    shadowRadius: 5, //IOS
+    elevation: 5, // Android
   },
   infoViewTitle: {
     padding: 15, 
-    color: root.TextColor,
     fontSize: 20, 
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   infoViewContent: {
-    backgroundColor: root.LightenColor, 
-    borderBottomLeftRadius: 5, 
-    borderBottomRightRadius: 5, 
+    backgroundColor: LightenColor, 
+    borderRadius: 5,
     padding: 15, 
-    color: root.TextColor,
-    fontSize: 16
+    overflow: "hidden", // IOS
   },
   infoIcon: {
     fontSize: 22, 
     fontWeight: "bold"
   },
   loginView: {
-    backgroundColor: root.GwnuYellow, 
+    backgroundColor: GwnuYellow, 
     borderRadius: 5,
     padding: 10,
     shadowColor: 'black', // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
     shadowOpacity: 0.2, // IOS
-    shadowRadius: 1, //IOS
-    elevation: 8, // Android
+    shadowRadius: 5, //IOS
+    elevation: 5, // Android
   },
   loginViewText: {
     paddingHorizontal: 10, 
@@ -56,10 +54,10 @@ const styles = StyleSheet.create({
   }
 })
 
-const ReservationListScreen = () => {
+const LoginScreen = () => {
 
   useEffect(() => {
-    Logininit()
+    LoginConfigure()
   }, [])
 
   return (
@@ -70,9 +68,9 @@ const ReservationListScreen = () => {
             {" 사용안내"}
           </Text>
           <Text style={styles.infoViewContent}>
-            ● 예약은 로그인 후 이용할 수 있습니다.{'\n'}
-            ● 예약 후 불참 시 페널티가 부여될 수 있습니다.{'\n'}
-            ● 이름, 학과, 학번 등의 정보가 부정확할 경우 계정이 정지될 수 있습니다.
+            ・ 예약은 로그인 후 이용할 수 있습니다.{'\n'}
+            ・ 예약 후 불참 시 페널티가 부여될 수 있습니다.{'\n'}
+            ・ 이름, 학과, 학번 등의 정보가 부정확할 경우 계정이 정지될 수 있습니다.
           </Text>
         </View>
 
@@ -86,4 +84,4 @@ const ReservationListScreen = () => {
   );
 };
 
-export default ReservationListScreen;
+export default LoginScreen;
