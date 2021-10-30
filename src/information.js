@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 
 const information = () => {
 return (
-        <View style={styles.rootView}>
+        <View>
             <View style={styles.infoView}>
                 <Text style={styles.infoViewTitle}>
                     {"커뮤니티"}
@@ -67,9 +67,9 @@ return (
                 </Text>
             </View>
 
-            <View>
-                <Text style={styles.infoViewTitle}>
-                {"체육 시설물 정보 확인"}
+            <View style={styles.infoView}>
+                <Text style={styles.infoViewContent}>
+                {"체육 시설물 정보 확인\n정보 정보 정보 정보\n정보정보"}
                 
                 </Text>
             </View>
