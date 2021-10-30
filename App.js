@@ -1,104 +1,10 @@
-import React, { useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Text from './fuctions/GwnuText'
-import ReservationListScreen from './src/ReservationListScreen'
+import MainScreen from './src/MainScreen';
 import LoginScreen from './src/LoginScreen'
-import MyPageScreen from './src/MyPageScreen'
-import { WithLocalSvg } from 'react-native-svg';
-import LogoSvg from './assets/logo.svg'
-import { GwnuYellow, GwnuPurple } from './fuctions/GwnuColor'
 
-const styles = StyleSheet.create({
-  loginButton: {
-    backgroundColor: GwnuYellow, 
-    borderRadius: 5, 
-    shadowColor: 'black', // IOS
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 0.2, // IOS
-    shadowRadius: 1, //IOS
-    elevation: 5, // Android
-  },
-  loginButtonText: {
-    color: 'white', 
-    paddingVertical: 8, 
-    paddingHorizontal: 10, 
-    fontWeight: "bold",
-  },
-  logoTitle: {
-    flexDirection: "row", 
-    alignItems: "center", 
-    flex: 1 
-  },
-  logoTitleText: {
-    marginStart: 10, 
-    fontSize: 20, 
-    fontWeight: "bold"
-  }
-});
-
-const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-
-const Main = ({ navigation }) => {
-
-  const LogoTitle = () => {
-    return (
-      <View style={styles.logoTitle}>
-        <WithLocalSvg width={30} height={30} asset={LogoSvg}/>
-        <Text style={styles.logoTitleText}>
-          체육 시설물 통합 예약
-        </Text>
-      </View>
-    )
-  }
-
-  const LoginButton = ({ onPress }) => {
-    return(
-      <TouchableOpacity
-        activeOpacity={0.8}
-        style={styles.loginButton}
-        onPress={onPress}
-      >
-        <Text style={styles.loginButtonText}>로그인</Text>
-      </TouchableOpacity> 
-    )
-  }
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => <LogoTitle />,
-      headerRight: () => <LoginButton onPress={() => navigation.navigate("Login")}/>
-    })
-  }, [])
-
-  return(
-    <Tab.Navigator 
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
-          if (route.name === "예약") {
-            iconName = focused ? 'calendar' : 'calendar-outline';
-          } else if (route.name === "마이페이지") {
-            iconName = focused ? 'person' : 'person-outline';
-          }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: GwnuPurple,
-        tabBarInactiveTintColor: 'gray',
-      })}
-    >
-      <Tab.Screen name="예약" component={ReservationListScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="마이페이지" component={MyPageScreen} options={{ headerShown: false }}/>
-    </Tab.Navigator>
-  )
-}
-
 
 const App = () => {
 
@@ -106,11 +12,11 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Main"
-          component={Main}
+          name="메인"
+          component={MainScreen}
         />
         <Stack.Screen
-          name="Login"
+          name="로그인"
           component={LoginScreen}
         />
       </Stack.Navigator>
