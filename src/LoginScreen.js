@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Text from '../fuctions/GwnuText'
 import { LoginConfigure, GetUserInfo, LoginButton } from '../fuctions/GoogleLogin'
+import { GetInfo } from '../fuctions/Firestore'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { GwnuBeige, GwnuYellow, LightenColor } from '../fuctions/GwnuColor'
 
@@ -11,6 +12,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   infoView: {
+    alignSelf: 'stretch',
     backgroundColor: GwnuBeige,
     borderRadius: 5,
     marginHorizontal: 30,
@@ -27,6 +29,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   infoViewContent: {
+    minHeight: 100,
     backgroundColor: LightenColor,
     borderRadius: 5,
     padding: 15,
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
 
 const LoginScreen = ({ navigation }) => {
   const user = GetUserInfo()
+  const usage = GetInfo('usage')
 
   useEffect(() => {
     LoginConfigure()
@@ -73,9 +77,9 @@ const LoginScreen = ({ navigation }) => {
           {" 사용안내"}
         </Text>
         <Text style={styles.infoViewContent}>
-          ・ 예약은 로그인 후 이용할 수 있습니다.{'\n'}
-          ・ 예약 후 불참 시 페널티가 부여될 수 있습니다.{'\n'}
-          ・ 이름, 학과, 학번 등의 정보가 부정확할 경우 계정이 정지될 수 있습니다.
+          {usage && Object.values(usage).map((el, i) => {
+            return `${i ? '\n' : ''}・ ${el}`
+          })}
         </Text>
       </View>
 
