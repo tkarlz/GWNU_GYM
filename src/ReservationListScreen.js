@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Text from '../fuctions/GwnuText'
 import { LoginConfigure, LoginButton } from '../fuctions/GoogleLogin'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -104,6 +104,16 @@ const styles = StyleSheet.create({
     
   }
 })
+const infoshowButton = () => {
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={contentviewBlue}
+      onPress={onPress}
+    >
+    </TouchableOpacity>
+  )
+}
 const ReservationListScreen = () => {
   return (
     <View>
@@ -116,7 +126,7 @@ const ReservationListScreen = () => {
     </View>
     <View style={styles.listView}>
       <Text style={styles.contentviewBlue}>
-        체육관                                                     6  /   24
+        체육관
         </Text>
       </View>
       <View style={styles.listView}>

@@ -59,7 +59,7 @@ return (
         <View>
             <View style={styles.infoView}>
                 <Text style={styles.infoViewTitle}>
-                    {"커뮤니티"}
+                    {"커뮤니티(클릭한 시설물에 대한)"}
                 </Text>
                 <Text style={styles.infoViewContent}>
                     ・ 몇 명 구합니다.{'\n'}
@@ -69,9 +69,11 @@ return (
 
             <View style={styles.infoView}>
                 <Text style={styles.infoViewContent}>
-                {"체육 시설물 정보 확인\n정보 정보 정보 정보\n정보정보"}
+                {"데이터베이스 불러오기 체육 시설물 정보 확인\n정보 정보 정보 정보\n정보정보"}
                 
                 </Text>
+
+            
             </View>
         </View>
     );
