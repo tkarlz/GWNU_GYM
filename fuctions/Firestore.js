@@ -14,6 +14,10 @@ const GetInfo = (type) => {
         }
     }
 
+    // for testing...
+    // console.log(ReservationRegister('gym', '20211101', ['1400', '1500'], 'Q4ynR3URhXXUuHspkP9O4JRQ1Eo1'))
+    // console.log(ReservationInquiry('gym', '20211101'))
+
     useEffect(() => {
         getData()
     }, [])
@@ -60,7 +64,7 @@ const ReservationRegister = (type, day, time, uid) => { // ('gym', '20211101', [
                 
                 for (const [i, t] of time.entries()) {
                     const timeRef = dbRef.collection(day).doc(t)
-                    if (users[i].data()['users'].length >= maximum) {
+                    if (users[i].data() && users[i].data()['users'].length >= maximum) {
                         throw new Error('Exceeded')
                     }
                     tran.set(
@@ -70,11 +74,12 @@ const ReservationRegister = (type, day, time, uid) => { // ('gym', '20211101', [
                 }
                 tran.set(
                     db.collection('Users').doc(uid).collection('history').doc(day),
-                    { time: time }, { merge: true }
+                    { type: type, time: time }, { merge: true }
                 )
             })
             setResult(true)
-        } catch {
+        } catch(e) {
+            console.log(e)
             setResult(false)
         }
     }
