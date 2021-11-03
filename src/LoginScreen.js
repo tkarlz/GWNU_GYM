@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Text from '../fuctions/GwnuText'
-import { LoginConfigure, GetUserInfo, LoginButton } from '../fuctions/GoogleLogin'
-import { GetInfo } from '../fuctions/Firestore'
+import Text from '../functions/GwnuText'
+import { LoginConfigure, GetUserInfo, LoginButton } from '../functions/GoogleLogin'
+import { GetInfo } from '../functions/Firestore'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { GwnuBeige, GwnuYellow, LightenColor } from '../fuctions/GwnuColor'
+import { GwnuBeige, GwnuYellow, LightenColor } from '../functions/GwnuColor'
 
 const styles = StyleSheet.create({
   rootView: {

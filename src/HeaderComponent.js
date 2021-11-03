@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { WithLocalSvg } from 'react-native-svg';
-import { SignOut } from '../fuctions/GoogleLogin'
-import Text from '../fuctions/GwnuText'
+import { SignOut } from '../functions/GoogleLogin'
+import Text from '../functions/GwnuText'
 import LogoSvg from '../assets/logo.svg'
-import { GwnuYellow } from '../fuctions/GwnuColor'
+import { GwnuYellow } from '../functions/GwnuColor'
 
 const styles = StyleSheet.create({
   logoTitle: {

@@ -4,8 +4,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ReservationListScreen from './ReservationListScreen'
 import MyPageScreen from './MyPageScreen'
 import { LogoTitle, LoginButton, UserName } from './HeaderComponent'
-import { GetUserInfo } from '../fuctions/GoogleLogin'
-import { GwnuPurple } from '../fuctions/GwnuColor'
+import { GetUserInfo } from '../functions/GoogleLogin'
+import { GwnuPurple } from '../functions/GwnuColor'
 
 const Tab = createBottomTabNavigator();
 
