@@ -14,15 +14,59 @@ const GetInfo = (type) => {
         }
     }
 
-    // for testing...
-    // console.log(ReservationRegister('gym', '20211101', ['1400', '1500'], 'Q4ynR3URhXXUuHspkP9O4JRQ1Eo1'))
-    // console.log(ReservationInquiry('gym', '20211101'))
-
     useEffect(() => {
         getData()
     }, [])
 
     return info
+}
+
+const GetFacilityList = () => {
+    const [list, setList] = useState(null)
+    const getData = async () => {
+        try {
+            const collection = await db.collection('Reservation').get()
+            const temp = []
+
+            for (const doc of collection.docs) {
+                const data = doc.data()
+                temp.push({ type: doc.id, location: data['location'], opening: data['opening'], closing: data['closing'] })
+            }
+            setList(temp)
+        } catch {
+            setList(null)
+        }
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+    return list
+}
+
+const GetHistory = (uid) => {
+    const [history, setHistory] = useState(null)
+    const getData = async () => {
+        try {
+            const collection = await db.collection('Users').doc(uid).collection('history').get()
+            const temp = []
+
+            for (const doc of collection.docs) {
+                const data = doc.data()
+                temp.push({ day: doc.id, time: data['time'], type: data['type'] })
+            }
+            setHistory(temp)
+        } catch {
+            setHistory(null)
+        }
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+    return history
 }
 
 const ReservationInquiry = (type, day) => {  //  ('gym', '20211101')
@@ -33,10 +77,10 @@ const ReservationInquiry = (type, day) => {  //  ('gym', '20211101')
         const subscriber = dbRef.collection(day).onSnapshot(async (documentSnapshot) => {
             try {
                 const info = (await dbRef.get()).data()
-                const temp = []
+                const temp = [{ opening: info['opening'], closing: info['closing'], maximum: info['maximum'] }]
 
-                for (const el of documentSnapshot.docs) {
-                    temp.push({ time: el.id, num: el.data()['users'].length, max: info['maximum'] })
+                for (const doc of documentSnapshot.docs) {
+                    temp.push({ time: doc.id, num: doc.data()['users'].length })
                 }
                 setReservation(temp)
             } catch {
@@ -91,8 +135,34 @@ const ReservationRegister = (type, day, time, uid) => { // ('gym', '20211101', [
     return result
 }
 
+const GetCommunityList = (type) => {
+    const [post, setPost] = useState(null)
+    const getData = async () => {
+        try {
+            const collection = await db.collection('Community').doc(type).collection(type).orderBy('date', 'desc').get()
+            const temp = []
+
+            for (const doc of collection.docs) {
+                temp.push(doc.data()['title'])
+            }
+            setPost(temp)
+        } catch {
+            setPost(null)
+        }
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+    return post
+}
+
 export {
     GetInfo,
+    GetFacilityList,
+    GetHistory,
     ReservationInquiry,
-    ReservationRegister
+    ReservationRegister,
+    GetCommunityList
 }
