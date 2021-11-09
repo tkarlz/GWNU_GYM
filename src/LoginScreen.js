@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: GwnuBeige,
     borderRadius: 5,
     marginHorizontal: 30,
-    marginVertical: 50,
+    marginVertical: 40,
     shadowColor: 'black', // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
     shadowOpacity: 0.2, // IOS
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
     minHeight: 100,
     backgroundColor: LightenColor,
     borderRadius: 5,
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingVertical: Platform.OS === 'ios' ? 25 : 15,
     overflow: "hidden", // IOS
   },
   infoIcon: {

@@ -1,19 +1,21 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Text from '../functions/GwnuText'
-import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor } from '../functions/GwnuColor'
+import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor, TextColor, TextColorWhite } from '../functions/GwnuColor'
+import { GetCommunityList, GetFacilityList } from '../functions/Firestore';
+import converter from '../functions/ConvertName';
 
 const styles = StyleSheet.create({
   rootView: {
     flex: 1,
-    alignItems: "center",
   },
   infoView: {
     alignSelf: 'stretch',
     backgroundColor: GwnuBeige,
     borderRadius: 5,
     marginHorizontal: 30,
-    marginVertical: 50,
+    marginTop: 40,
+    marginBottom: 10,
     shadowColor: 'black', // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
     shadowOpacity: 0.2, // IOS
@@ -26,60 +28,92 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   infoViewContent: {
-    minHeight: 100,
+    minHeight: 75,
     backgroundColor: LightenColor,
     borderRadius: 5,
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingVertical: Platform.OS === 'ios' ? 25 : 15,
     overflow: "hidden", // IOS
   },
   listButton: {
     alignSelf: 'stretch',
     borderRadius: 5,
     marginHorizontal: 30,
-    marginBottom: 15,
+    marginVertical: 10,
     shadowColor: 'black', // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
     shadowOpacity: 0.2, // IOS
     shadowRadius: 5, //IOS
     elevation: 5 // Android
   },
-  listButtonText: {
-    padding: 20,
+  listButtonView: {
+    flexDirection: "row", 
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  listButtonTypeText: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: Platform.OS === 'ios' ? 15 : 5,
+    fontSize: 20,
     fontWeight: "bold"
+  },
+  listButtonLocationText: {
+    paddingHorizontal: 20,
+    paddingTop: 10
+  },
+  listButtonAvailableText: {
+    paddingHorizontal: 20,
+    paddingBottom: Platform.OS === 'ios' ? 20 : 5
   }
 })
 
 const ReservationListScreen = ({ navigation }) => {
+  const noticeList = GetCommunityList('notice')
+  const facilityList = GetFacilityList()
+  const colorRatation = [[GwnuBlue, TextColorWhite], [GwnuPurple, TextColorWhite], [GwnuBeige, TextColor], [GwnuYellow, TextColor]]
 
-  const ListView = ({ color, text }) => {
+  const ListView = ({ color, type, location, available }) => {
     return (
       <TouchableOpacity 
         activeOpacity={0.8}
-        style={[styles.listButton, { backgroundColor: color }]}
-        onPress={() => navigation.navigate("예약하기")}
-        >
-        <Text style={styles.listButtonText}>
-          {text}
+        style={[styles.listButton, { backgroundColor: color[0] }]}
+        onPress={() => navigation.navigate("예약하기")} >
+
+        <View style={styles.listButtonView}>
+          <Text style={[styles.listButtonTypeText, { color: color[1] }]}>
+            {type}
+          </Text>
+          <Text style={[styles.listButtonLocationText, { color: color[1] }]}>
+            {location}
+          </Text>
+        </View>
+        
+        <Text style={[styles.listButtonAvailableText, { color: color[1] }]}>
+          이용 가능 시간 : {available}
         </Text>
       </TouchableOpacity>
     )
   }
 
   return (
-    <View style={styles.rootView}>
+    <ScrollView style={styles.rootView}>
       <View style={styles.infoView}>
         <Text style={styles.infoViewTitle}>공지사항</Text>
         <Text style={styles.infoViewContent}>
-          ・ 추석 체육시설물 휴무 안내{'\n'}
-          ・ 배드민턴장 시설 보수 공지
+        {noticeList && noticeList.map((el, i) => {
+            return `${i ? '\n' : ''}・ ${el}`
+          })}
         </Text>
       </View>
-      <ListView color={GwnuBlue} text={'체육관'} />
-      <ListView color={GwnuPurple} text={'헬스장(체육관)'} />
-      <ListView color={GwnuBeige} text={'테니스장'} />
-      <ListView color={GwnuYellow} text={'헬스장(기숙사)'} />
-      <ListView color={GwnuBlue} text={'배드민턴'} />
-    </View>
+      
+      <View style={{flex: 1, height: 1, backgroundColor: 'lightgray', margin: 20}} />
+
+      {facilityList && facilityList.map((el, i) => {
+        const available = `${el.opening} ~ ${el.closing}`;
+        return <ListView key={i} color={colorRatation[i%4]} type={converter(el.type)} location={el.location} available={available} />
+      })}
+    </ScrollView>
 
   );
 };
