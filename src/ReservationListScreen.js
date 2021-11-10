@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Text from '../functions/GwnuText'
 import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor, TextColor, TextColorWhite } from '../functions/GwnuColor'
 import { GetCommunityList, GetFacilityList } from '../functions/Firestore';
-import converter from '../functions/ConvertName';
+import Converter from '../functions/ConvertName';
 
 const styles = StyleSheet.create({
   rootView: {
@@ -111,7 +111,7 @@ const ReservationListScreen = ({ navigation }) => {
 
       {facilityList && facilityList.map((el, i) => {
         const available = `${el.opening} ~ ${el.closing}`;
-        return <ListView key={i} color={colorRatation[i%4]} type={converter(el.type)} location={el.location} available={available} />
+        return <ListView key={i} color={colorRatation[i%4]} type={Converter(el.type)} location={el.location} available={available} />
       })}
     </ScrollView>
 

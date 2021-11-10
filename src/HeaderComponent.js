@@ -4,7 +4,7 @@ import { WithLocalSvg } from 'react-native-svg';
 import { SignOut } from '../functions/GoogleLogin'
 import Text from '../functions/GwnuText'
 import LogoSvg from '../assets/logo.svg'
-import { GwnuYellow } from '../functions/GwnuColor'
+import { GwnuYellow, TextColorWhite } from '../functions/GwnuColor'
 
 const styles = StyleSheet.create({
   logoTitle: {
@@ -23,11 +23,11 @@ const styles = StyleSheet.create({
     shadowColor: 'black', // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
     shadowOpacity: 0.2, // IOS
-    shadowRadius: 1, //IOS
+    shadowRadius: 5, //IOS
     elevation: 5, // Android
   },
   loginButtonText: {
-    color: 'white',
+    color: TextColorWhite,
     paddingVertical: 8,
     paddingHorizontal: 10,
     fontWeight: "bold",

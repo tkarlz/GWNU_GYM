@@ -1,4 +1,4 @@
-const converter = (text) => {
+const Converter = (text) => {
     switch(text) {
         case 'gym': return '체육관'
         case 'badminton': return '배트민턴장'
@@ -9,4 +9,4 @@ const converter = (text) => {
     }
 }
 
-export default converter
+export default Converter
