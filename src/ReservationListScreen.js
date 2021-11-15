@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 })
 
 const ReservationListScreen = ({ navigation }) => {
-  const noticeList = GetCommunityList('notice')
+  const noticeList = GetCommunityList('notice', 3)
   const facilityList = GetFacilityList()
   const colorRatation = [[GwnuBlue, TextColorWhite], [GwnuPurple, TextColorWhite], [GwnuBeige, TextColor], [GwnuYellow, TextColor]]
 

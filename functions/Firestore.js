@@ -123,7 +123,6 @@ const ReservationRegister = (type, day, time, uid) => { // ('gym', '20211101', [
             })
             setResult(true)
         } catch(e) {
-            console.log(e)
             setResult(false)
         }
     }
@@ -135,11 +134,48 @@ const ReservationRegister = (type, day, time, uid) => { // ('gym', '20211101', [
     return result
 }
 
-const GetCommunityList = (type) => {
+const ReservationCancel = (type, day, time, uid) => { // ('gym', '20211101', ['0800', '0900'], user.uid)
+    const [result, setResult] = useState(false)
+    const resRef = db.collection('Reservation').doc(type).collection(day)
+    const userRef = db.collection('Users').doc(uid)
+
+    const deleteData = async () => {
+        try{
+            await db.runTransaction(async (tran) => {
+                for (const t of time) {
+                    const temp = await tran.get(resRef.doc(t))
+                    const path = temp.data()['users'].map((el) => el.path)
+                    if (!(path.includes(userRef.path)))
+                        throw new Error('Not Exist')
+                }
+                
+                for (const t of time) {
+                    tran.update(resRef.doc(t), {
+                        users: firestore.FieldValue.arrayRemove(userRef)
+                    })
+                }
+                tran.delete(userRef.collection('history').doc(day))
+            })
+            setResult(true)
+        } catch(e) {
+            setResult(false)
+        }
+    }
+
+    useEffect(() => {
+        deleteData()
+    }, [])
+
+    return result
+}
+
+const GetCommunityList = (type, limit = null) => {
     const [post, setPost] = useState(null)
     const getData = async () => {
         try {
-            const collection = await db.collection('Community').doc(type).collection(type).orderBy('date', 'desc').get()
+            const dbRef = db.collection('Community').doc(type).collection(type).orderBy('date', 'desc')
+            if (limit) dbRef.limit(limit)
+            const collection = await dbRef.get()
             const temp = []
 
             for (const doc of collection.docs) {
@@ -158,11 +194,47 @@ const GetCommunityList = (type) => {
     return post
 }
 
+const PostInCommunity = (type, title, contents, uid) => {  // ('gym', 'title', 'contents', user.uid)
+    const [result, setResult] = useState(false)
+    const batch = db.batch()
+
+    const setData = async () => {
+        try{
+            const commRef = db.collection('Community').doc(type).collection(type).doc()
+            const now = firestore.FieldValue.serverTimestamp()
+            batch.set(commRef, {
+                title: title,
+                contents: contents,
+                writer: db.doc(`Users/${uid}`),
+                date: now
+            }, { merge: true })
+
+            batch.set(db.collection('Users').doc(uid).collection('community').doc(), {
+                type: type,
+                postRef: db.doc(commRef.path)
+            }, { merge: true })
+
+            await batch.commit()
+            setResult(true)
+        } catch(e) {
+            setResult(false)
+        }
+    }
+
+    useEffect(() => {
+        setData()
+    }, [])
+
+    return result
+}
+
 export {
     GetInfo,
     GetFacilityList,
     GetHistory,
     ReservationInquiry,
     ReservationRegister,
-    GetCommunityList
+    ReservationCancel,
+    GetCommunityList,
+    PostInCommunity
 }
