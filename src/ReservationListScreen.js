@@ -101,7 +101,7 @@ const ReservationListScreen = ({ navigation }) => {
       <View style={styles.infoView}>
         <Text style={styles.infoViewTitle}>공지사항</Text>
         <Text style={styles.infoViewContent}>
-        {noticeList && noticeList.map((el, i) => {
+        {noticeList?.map((el, i) => {
             return `${i ? '\n' : ''}・ ${el}`
           })}
         </Text>
@@ -109,7 +109,7 @@ const ReservationListScreen = ({ navigation }) => {
       
       <View style={{flex: 1, height: 1, backgroundColor: 'lightgray', margin: 20}} />
 
-      {facilityList && facilityList.map((el, i) => {
+      {facilityList?.map((el, i) => {
         const available = `${el.opening} ~ ${el.closing}`;
         return <ListView key={i} color={colorRatation[i%4]} type={Converter(el.type)} location={el.location} available={available} />
       })}

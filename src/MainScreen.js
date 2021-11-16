@@ -4,16 +4,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ReservationListScreen from './ReservationListScreen'
 import MyPageScreen from './MyPageScreen'
+import AdminMainScreen from './admin/AdminMainScreen';
 import { LogoTitle, LoginButton, UserName } from './HeaderComponent'
 import { GetUserInfo } from '../functions/GoogleLogin'
 import { GwnuPurple } from '../functions/GwnuColor'
 import { LoginAlert } from '../functions/Alert';
+import { IsAdmin } from '../functions/Firestore';
 
 const Tab = createBottomTabNavigator();
 
 const MainScreen = ({ navigation }) => {
   const [alertVisible, setAlertVisible] = useState(false);
   const user = GetUserInfo()
+  const isAdmin = IsAdmin(user?.uid)
 
   useEffect(() => {
     navigation.setOptions({
@@ -40,6 +43,8 @@ const MainScreen = ({ navigation }) => {
               iconName = focused ? 'calendar' : 'calendar-outline';
             } else if (route.name === "마이페이지") {
               iconName = focused ? 'person' : 'person-outline';
+            } else if (route.name === "관리자 페이지") {
+              iconName = focused ? 'settings' : 'settings-outline'
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -49,10 +54,13 @@ const MainScreen = ({ navigation }) => {
         })}
       >
         <Tab.Screen name="예약" component={ReservationListScreen} options={{ headerShown: false }} />
-        <Tab.Screen name="마이페이지" component={MyPageScreen} options={{ headerShown: false, tabBarButton: (props) => (
-          user ? <TouchableOpacity {...props} /> :
-          <TouchableOpacity {...props} onPress={() => setAlertVisible(true)} />
-        ) }} />
+        {isAdmin?
+          <Tab.Screen name="관리자 페이지" component={AdminMainScreen} options={{ headerShown: false }} /> :
+          <Tab.Screen name="마이페이지" component={MyPageScreen} options={{ headerShown: false, tabBarButton: (props) => (
+            user ? <TouchableOpacity {...props} /> :
+            <TouchableOpacity {...props} onPress={() => setAlertVisible(true)} />
+          ) }} /> 
+        }
       </Tab.Navigator>
     </>
   )

@@ -4,7 +4,7 @@ import Text from '../functions/GwnuText'
 import { LoginConfigure, GetUserInfo, LoginButton } from '../functions/GoogleLogin'
 import { GetInfo } from '../functions/Firestore'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { GwnuBeige, GwnuYellow, LightenColor } from '../functions/GwnuColor'
+import { GwnuBeige, GwnuYellow, LightenColor, TextColorWhite } from '../functions/GwnuColor'
 
 const styles = StyleSheet.create({
   rootView: {
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   loginViewText: {
     paddingHorizontal: 10,
-    color: 'white',
+    color: TextColorWhite,
     fontSize: 18,
     fontWeight: "bold"
   }
