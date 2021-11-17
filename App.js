@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainScreen from './src/MainScreen';
 import LoginScreen from './src/LoginScreen'
 import ReservationScreen from './src/ReservationScreen';
+import CommunityScreen from './src/CommunityScreen';
 import FacilityManageScreen from './src/admin/FacilityManageScreen';
 import CommunityManageScreen from './src/admin/CommunityManageScreen';
 
@@ -26,6 +27,12 @@ const App = () => {
           name="예약하기"
           component={ReservationScreen}
         />
+        <Stack.Screen
+          name="커뮤니티"
+          component={CommunityScreen}
+        />
+
+        {/*********** for admin ***********/}
         <Stack.Screen
           name="시설물 관리"
           component={FacilityManageScreen}

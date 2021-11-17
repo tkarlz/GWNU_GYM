@@ -49,7 +49,12 @@ const GetFacilityList = () => {
 
             for (const doc of collection.docs) {
                 const data = doc.data()
-                temp.push({ type: doc.id, location: data['location'], opening: data['opening'], closing: data['closing'] })
+                temp.push({ 
+                    type: doc.id, 
+                    location: data['location'], 
+                    opening: data['opening'], 
+                    closing: data['closing'], 
+                    info: data['info'] })
             }
             setList(temp)
         } catch {
