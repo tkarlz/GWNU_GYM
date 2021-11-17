@@ -78,11 +78,13 @@ const ReservationListScreen = ({ navigation }) => {
       <TouchableOpacity 
         activeOpacity={0.8}
         style={[styles.listButton, { backgroundColor: color[0] }]}
-        onPress={() => navigation.navigate("예약하기")} >
+        onPress={() => navigation.navigate("예약하기", {
+          type: type
+        })} >
 
         <View style={styles.listButtonView}>
           <Text style={[styles.listButtonTypeText, { color: color[1] }]}>
-            {type}
+            {Converter(type)}
           </Text>
           <Text style={[styles.listButtonLocationText, { color: color[1] }]}>
             {location}
@@ -111,7 +113,7 @@ const ReservationListScreen = ({ navigation }) => {
 
       {facilityList?.map((el, i) => {
         const available = `${el.opening} ~ ${el.closing}`;
-        return <ListView key={i} color={colorRatation[i%4]} type={Converter(el.type)} location={el.location} available={available} />
+        return <ListView key={i} color={colorRatation[i%4]} type={el.type} location={el.location} available={available} />
       })}
     </ScrollView>
 

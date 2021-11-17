@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Text from '../functions/GwnuText'
 import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor } from '../functions/GwnuColor'
-import { GetCommunityList, GetFacilityList } from '../functions/Firestore';
+import { GetCommunityList, GetFacilityList, ReservationInquiry, ReservationRegister } from '../functions/Firestore';
 
 const styles = StyleSheet.create({
   rootView: {
@@ -50,8 +50,9 @@ const styles = StyleSheet.create({
   }
 })
 
-const ReservationScreen = ({ navigation }) => {
- const Facilityinfo = GetFacilityList()
+const ReservationScreen = ({ route, navigation }) => {
+  const { type } = route.params
+  const Facilityinfo = GetFacilityList()
   const comm = GetCommunityList('health_gym')
   return (
     <View>
