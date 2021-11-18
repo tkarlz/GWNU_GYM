@@ -56,8 +56,7 @@ const GetFacilityList = () => {
                         name: data['name'],
                         location: data['location'],
                         opening: data['opening'],
-                        closing: data['closing'],
-                        info: data['info']
+                        closing: data['closing']
                     })
                 }
                 setList(temp)
@@ -105,7 +104,13 @@ const ReservationInquiry = (type, day) => {  //  ('gym', '20211101')
         const subscriber = dbRef.collection(day).onSnapshot(async (documentSnapshot) => {
             try {
                 const info = (await dbRef.get()).data()
-                const temp = [{ opening: info['opening'], closing: info['closing'], maximum: info['maximum'] }]
+                const temp = [{ 
+                    name: info['name'],
+                    location: info['location'],
+                    opening: info['opening'],
+                    closing: info['closing'],
+                    info: info['info'],
+                    maximum: info['maximum'] }]
 
                 for (const doc of documentSnapshot.docs) {
                     temp.push({ time: doc.id, num: doc.data()['users'].length })
