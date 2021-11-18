@@ -61,7 +61,7 @@ const ReservationScreen = ({ route, navigation }) => {
          <Text style={styles.infoViewTitle}>커뮤니티</Text>
           <Text style={styles.infoViewContent}>
             {comm && comm.map((el, i) => {
-             return `${i ? '\n' : ''}・ ${el}`
+             return `${i ? '\n' : ''}・ ${el.title}`
            })}
           </Text>
         </View>

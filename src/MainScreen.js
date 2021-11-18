@@ -8,7 +8,7 @@ import AdminMainScreen from './admin/AdminMainScreen';
 import { LogoTitle, LoginButton, UserName } from './HeaderComponent'
 import { GetUserInfo } from '../functions/GoogleLogin'
 import { GwnuPurple } from '../functions/GwnuColor'
-import { LoginAlert } from '../functions/Alert';
+import { LoginAlert } from './AlertDialog';
 import { IsAdmin } from '../functions/Firestore';
 
 const Tab = createBottomTabNavigator();

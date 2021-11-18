@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Converter from '../../functions/ConvertName';
 import { GetFacilityList } from '../../functions/Firestore';
 import Text from '../../functions/GwnuText'
 import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, TextColor, TextColorWhite } from '../../functions/GwnuColor'
-import { DeleteAlert } from '../../functions/Alert';
+import { DeleteAlert } from '../AlertDialog';
 
 const styles = StyleSheet.create({
   rootView: {
@@ -67,6 +66,8 @@ const styles = StyleSheet.create({
 const FacilityManageScreen = ({ navigation }) => {
   const facilityList = GetFacilityList()
   const [editMode, setEditMode] = useState(false)
+
+  const [selectedType, setSelectedType] = useState(null)
   const [selectedName, setSelectedName] = useState(null)
   const [alertVisible, setAlertVisible] = useState(false)
 
@@ -88,7 +89,7 @@ const FacilityManageScreen = ({ navigation }) => {
     })
   }, [editMode])
 
-  const ListView = ({ color, type }) => {
+  const ListView = ({ color, type, name }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -99,7 +100,7 @@ const FacilityManageScreen = ({ navigation }) => {
         }} >
 
         <Text style={[styles.listViewText, { color: color[1] }]}>
-          {Converter(type)}
+          {name}
         </Text>
         <Ionicons name="chevron-forward-outline" style={[styles.listViewText, { color: color[1] }]} />
       </TouchableOpacity>
@@ -111,14 +112,15 @@ const FacilityManageScreen = ({ navigation }) => {
       {facilityList?.map((el, i) => {
         return (
           <View key={i} style={styles.listRootView}>
-            <ListView color={colorRatation[i % 4]} type={el.type} />
+            <ListView color={colorRatation[i % 4]} type={el.type} name={el.name} />
 
             {editMode ?
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.deleteButton}
                 onPress={() => {
-                  setSelectedName(Converter(el.type))
+                  setSelectedType(el.type)
+                  setSelectedName(el.name)
                   setAlertVisible(true)
                 }} >
 
@@ -137,7 +139,12 @@ const FacilityManageScreen = ({ navigation }) => {
           <Ionicons name="add-circle" style={styles.addButtonIcon} />
         </TouchableOpacity> : null}
 
-      <DeleteAlert name={selectedName} alertVisible={alertVisible} setAlertVisible={setAlertVisible} navigation={navigation} />
+      <DeleteAlert
+        type={selectedType}
+        name={selectedName}
+        alertVisible={alertVisible}
+        setAlertVisible={setAlertVisible}
+      />
     </ScrollView>
   );
 };

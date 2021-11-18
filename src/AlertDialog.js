@@ -1,9 +1,10 @@
 import React from "react";
 import { Modal, StyleSheet, View, TouchableOpacity, Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Text from "./GwnuText";
-import { GwnuPurple, TextColorWhite } from "./GwnuColor";
-import { LoginButton } from '../src/HeaderComponent'
+import Text from "../functions/GwnuText";
+import { GwnuPurple, TextColorWhite } from "../functions/GwnuColor";
+import { LoginButton } from './HeaderComponent'
+import { RemoveFacility } from "../functions/AdminFirestore";
 
 const slideStyles = StyleSheet.create({
     centeredView: {
@@ -132,7 +133,7 @@ const LoginAlert = ({ alertVisible, setAlertVisible, navigation }) => {
     );
 };
 
-const DeleteAlert = ({ name, alertVisible, setAlertVisible, navigation }) => {
+const DeleteAlert = ({ type, name, alertVisible, setAlertVisible }) => {
 
     return (
         <Modal
@@ -156,9 +157,10 @@ const DeleteAlert = ({ name, alertVisible, setAlertVisible, navigation }) => {
                         <TouchableOpacity
                             activeOpacity={0.8}
                             style={[fadeStyles.button, fadeStyles.buttonDelete]}
-                            onPress={() => { 
+                            onPress={() => {
                                 console.log("delete")
-                                setAlertVisible(false) 
+                                // RemoveFacility(type).then(() => { })  // Dangerous, for Testing..
+                                setAlertVisible(false)
                             }} >
 
                             <Text style={[fadeStyles.buttonText, fadeStyles.buttonTextDelete]}>삭제</Text>

@@ -3,7 +3,6 @@ import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Text from '../functions/GwnuText'
 import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor, TextColor, TextColorWhite } from '../functions/GwnuColor'
 import { GetCommunityList, GetFacilityList } from '../functions/Firestore';
-import Converter from '../functions/ConvertName';
 
 const styles = StyleSheet.create({
   rootView: {
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
     elevation: 5 // Android
   },
   listButtonView: {
-    flexDirection: "row", 
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
   },
@@ -73,9 +72,9 @@ const ReservationListScreen = ({ navigation }) => {
   const facilityList = GetFacilityList()
   const colorRatation = [[GwnuBlue, TextColorWhite], [GwnuPurple, TextColorWhite], [GwnuBeige, TextColor], [GwnuYellow, TextColor]]
 
-  const ListView = ({ color, type, location, available }) => {
+  const ListView = ({ color, type, name, location, available }) => {
     return (
-      <TouchableOpacity 
+      <TouchableOpacity
         activeOpacity={0.8}
         style={[styles.listButton, { backgroundColor: color[0] }]}
         onPress={() => navigation.navigate("예약하기", {
@@ -84,13 +83,13 @@ const ReservationListScreen = ({ navigation }) => {
 
         <View style={styles.listButtonView}>
           <Text style={[styles.listButtonTypeText, { color: color[1] }]}>
-            {Converter(type)}
+            {name}
           </Text>
           <Text style={[styles.listButtonLocationText, { color: color[1] }]}>
             {location}
           </Text>
         </View>
-        
+
         <Text style={[styles.listButtonAvailableText, { color: color[1] }]}>
           이용 가능 시간 : {available}
         </Text>
@@ -103,17 +102,25 @@ const ReservationListScreen = ({ navigation }) => {
       <View style={styles.infoView}>
         <Text style={styles.infoViewTitle}>공지사항</Text>
         <Text style={styles.infoViewContent}>
-        {noticeList?.map((el, i) => {
-            return `${i ? '\n' : ''}・ ${el}`
+          {noticeList?.map((el, i) => {
+            return `${i ? '\n' : ''}・ ${el.title}`
           })}
         </Text>
       </View>
-      
-      <View style={{flex: 1, height: 1, backgroundColor: 'lightgray', margin: 20}} />
+
+      <View style={{ flex: 1, height: 1, backgroundColor: 'lightgray', margin: 20 }} />
 
       {facilityList?.map((el, i) => {
         const available = `${el.opening} ~ ${el.closing}`;
-        return <ListView key={i} color={colorRatation[i%4]} type={el.type} location={el.location} available={available} />
+        return (
+          <ListView
+            key={i}
+            color={colorRatation[i % 4]}
+            type={el.type} name={el.name}
+            location={el.location}
+            available={available}
+          />
+        )
       })}
     </ScrollView>
 
