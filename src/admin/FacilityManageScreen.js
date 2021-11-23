@@ -134,7 +134,10 @@ const FacilityManageScreen = ({ navigation }) => {
         <TouchableOpacity
           activeOpacity={0.8}
           style={styles.addButton}
-          onPress={() => console.log("add")} >
+          onPress={() => {
+            setEditMode(false)
+            navigation.navigate("시설물 추가")
+          }} >
 
           <Ionicons name="add-circle" style={styles.addButtonIcon} />
         </TouchableOpacity> : null}

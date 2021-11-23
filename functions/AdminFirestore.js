@@ -3,28 +3,30 @@ import firestore from '@react-native-firebase/firestore';
 
 const db = firestore()
 
-const CreateFacility = () => {
-    const [result, setResult] = useState(null)
+const CreateFacility = async (name, location, maximum, info, openTime, closeTime) => {
+    try {
+        const temp = await db.collection('Reservation').where("name", "==", name).get()
+        if (!temp.empty) throw new Error('Exist')
 
-    const setData = async () => {
-        try {
-            // const data = await db.collection('Users').doc(uid).get()
-            setResult(null)
-        } catch {
-            setResult(null)
-        }
+        await db.collection('Reservation').doc().set({
+            name: name,
+            location: location,
+            maximum: maximum,
+            info: info,
+            openTime: openTime,
+            closeTime: closeTime
+        }, { merge: true })
+
+        return true
+    } catch {
+        return false
     }
-
-    useEffect(() => {
-        setData()
-    }, [])
-
-    return result
 }
 
 const RemoveFacility = async (type) => {
     try {
         await db.collection('Reservation').doc(type).delete()
+
         return true
     } catch {
         return false

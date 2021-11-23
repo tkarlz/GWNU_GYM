@@ -104,13 +104,14 @@ const ReservationInquiry = (type, day) => {  //  ('gym', '20211101')
         const subscriber = dbRef.collection(day).onSnapshot(async (documentSnapshot) => {
             try {
                 const info = (await dbRef.get()).data()
-                const temp = [{ 
+                const temp = [{
                     name: info['name'],
                     location: info['location'],
                     opening: info['opening'],
                     closing: info['closing'],
                     info: info['info'],
-                    maximum: info['maximum'] }]
+                    maximum: info['maximum']
+                }]
 
                 for (const doc of documentSnapshot.docs) {
                     temp.push({ time: doc.id, num: doc.data()['users'].length })
@@ -153,7 +154,7 @@ const ReservationRegister = async (type, day, time, uid) => { // ('gym', '202111
             )
         })
         return true
-    } catch (e) {
+    } catch {
         return false
     }
 }
@@ -179,7 +180,7 @@ const ReservationCancel = async (type, day, time, uid) => { // ('gym', '20211101
             tran.delete(userRef.collection('history').doc(day))
         })
         return true
-    } catch (e) {
+    } catch {
         return false
     }
 }
@@ -254,7 +255,7 @@ const PostInCommunity = async (type, title, contents, uid) => {  // ('gym', 'tit
         await batch.commit()
 
         return true
-    } catch (e) {
+    } catch {
         return false
     }
 }

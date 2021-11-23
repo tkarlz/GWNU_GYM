@@ -179,7 +179,31 @@ const DeleteAlert = ({ type, name, alertVisible, setAlertVisible }) => {
     );
 };
 
+const DefaultAlert = ({ message, alertVisible, setAlertVisible }) => {
+    const insets = useSafeAreaInsets()
+
+    return (
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={alertVisible}
+            onRequestClose={() => setAlertVisible(false)}
+        >
+            <TouchableOpacity
+                style={[slideStyles.centeredView, { marginBottom: 40 + insets.bottom }]}
+                activeOpacity={0}
+                onPress={() => setAlertVisible(false)}>
+
+                <View style={slideStyles.modalView}>
+                    <Text style={slideStyles.modalText}>{message}</Text>
+                </View>
+            </TouchableOpacity>
+        </Modal>
+    );
+};
+
 export {
     LoginAlert,
-    DeleteAlert
+    DeleteAlert,
+    DefaultAlert
 }
