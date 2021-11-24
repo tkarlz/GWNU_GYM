@@ -78,7 +78,7 @@ const ReservationListScreen = ({ navigation }) => {
         activeOpacity={0.8}
         style={[styles.listButton, { backgroundColor: color[0] }]}
         onPress={() => navigation.navigate("예약하기", {
-          type: type
+          type: type, name: name
         })} >
 
         <View style={styles.listButtonView}>

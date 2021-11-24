@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     infoViewContent: {
-        minHeight: 100,
+        Height: 20,
         backgroundColor: LightenColor,
         borderRadius: 5,
         padding: 15,
@@ -50,30 +50,29 @@ const styles = StyleSheet.create({
     }
 })
 
-const ListView = () => {
-    const comm =GetCommunityList('health_gym')
-    return (
-        <TouchableOpacity
-            activeOpacity={0.8}>
 
-                <Text style={styles.infoViewTitle}>
-                    {comm && comm.map((el) => {
-                        return el.title, el.date
-                    })}
-                </Text>
-
-        </TouchableOpacity>
-    )
-}
-const CommunityScreen = () => {
+const CommunityScreen = ({ route, navigation }) => {
+    const { type } = route.params;
+    const { title } = route.params;
+    const comm = GetCommunityList(type)
+   
     return (
-    <View>
-       <View style={styles.infoView}>
-          <Text style={styles.infoViewContent}>커뮤니티</Text>
-        </View>
-        <View style={styles.infoView}>
-           <ListView/>
-        </View>
+        <View>           
+           
+            {comm && comm.map((el, i) => {
+                if (title == el.title) {
+                    return (<View style={styles.infoView}>
+                        <Text style={styles.infoViewTitle}>{el.title}</Text>
+                        <Text style={styles.infoViewContent}>
+                            {el.contents}
+                        </Text>
+                        <Text style={styles.infoViewContent}>
+                            {el.date}
+                        </Text>
+                    </View>
+                    )
+                }
+            })}
     </View>
     );
 };
