@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import Text from '../fuctions/GwnuText'
-import { LoginConfigure, LoginButton } from '../fuctions/GoogleLogin'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor } from '../fuctions/GwnuColor'
+import React from 'react';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import Text from '../functions/GwnuText'
+import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor, TextColor, TextColorWhite } from '../functions/GwnuColor'
+import { GetCommunityList, GetFacilityList } from '../functions/Firestore';
 
 const styles = StyleSheet.create({
   rootView: {
     flex: 1,
-    alignItems: "center",
   },
   infoView: {
+    alignSelf: 'stretch',
     backgroundColor: GwnuBeige,
     borderRadius: 5,
     marginHorizontal: 30,
-    marginVertical: 50,
+    marginTop: 40,
+    marginBottom: 10,
     shadowColor: 'black', // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
     shadowOpacity: 0.2, // IOS
@@ -27,129 +27,102 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   infoViewContent: {
+    minHeight: 75,
     backgroundColor: LightenColor,
     borderRadius: 5,
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingVertical: Platform.OS === 'ios' ? 25 : 15,
     overflow: "hidden", // IOS
   },
-  infoIcon: {
-    fontSize: 22,
-    fontWeight: "bold"
-  },
-  loginView: {
-    backgroundColor: GwnuYellow,
+  listButton: {
+    alignSelf: 'stretch',
     borderRadius: 5,
-    padding: 10,
-    shadowColor: 'black', // IOS
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 0.2, // IOS
-    shadowRadius: 5, //IOS
-    elevation: 5, // Android
-  },
-  loginViewText: {
-    paddingHorizontal: 10,
-    color: 'white',
-    fontSize: 18,
-    fontWeight: "bold"
-  },
-  contentviewBlue: {
-    backgroundColor: GwnuBlue,
-    borderRadius: 5,
-    padding: 10,
-    shadowColor: 'black', // IOS
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 0.2, // IOS
-    shadowRadius: 5, //IOS
-    elevation: 5, // Android
-  },
-  contentviewYellow: {
-    backgroundColor: GwnuYellow,
-    borderRadius: 5,
-    padding: 10,
-    shadowColor: 'black', // IOS
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 0.2, // IOS
-    shadowRadius: 5, //IOS
-    elevation: 5, // Android
-  },
-    contentviewBeige: {
-    backgroundColor: GwnuBeige,
-    borderRadius: 5,
-    padding: 10,
-    shadowColor: 'black', // IOS
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 0.2, // IOS
-    shadowRadius: 5, //IOS
-    elevation: 5, // Android
-  },
-  contentviewPurple: {
-    backgroundColor: GwnuPurple,
-    borderRadius: 5,
-    padding: 10,
-    shadowColor: 'black', // IOS
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 0.2, // IOS
-    shadowRadius: 5, //IOS
-    elevation: 5, // Android
-    
-  },
-  listView: {
     marginHorizontal: 30,
-    marginBottom: 15,
+    marginVertical: 10,
     shadowColor: 'black', // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
     shadowOpacity: 0.2, // IOS
     shadowRadius: 5, //IOS
-    elevation: 5
-    
+    elevation: 5 // Android
+  },
+  listButtonView: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  listButtonTypeText: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: Platform.OS === 'ios' ? 15 : 5,
+    fontSize: 20,
+    fontWeight: "bold"
+  },
+  listButtonLocationText: {
+    paddingHorizontal: 20,
+    paddingTop: 10
+  },
+  listButtonAvailableText: {
+    paddingHorizontal: 20,
+    paddingBottom: Platform.OS === 'ios' ? 20 : 5
   }
 })
-const infoshowButton = () => {
+
+const ReservationListScreen = ({ navigation }) => {
+  const noticeList = GetCommunityList('notice', 3)
+  const facilityList = GetFacilityList()
+  const colorRatation = [[GwnuBlue, TextColorWhite], [GwnuPurple, TextColorWhite], [GwnuBeige, TextColor], [GwnuYellow, TextColor]]
+
+  const ListView = ({ color, type, name, location, available }) => {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        style={[styles.listButton, { backgroundColor: color[0] }]}
+        onPress={() => navigation.navigate("예약하기", {
+          type: type, name: name
+        })} >
+
+        <View style={styles.listButtonView}>
+          <Text style={[styles.listButtonTypeText, { color: color[1] }]}>
+            {name}
+          </Text>
+          <Text style={[styles.listButtonLocationText, { color: color[1] }]}>
+            {location}
+          </Text>
+        </View>
+
+        <Text style={[styles.listButtonAvailableText, { color: color[1] }]}>
+          이용 가능 시간 : {available}
+        </Text>
+      </TouchableOpacity>
+    )
+  }
+
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      style={contentviewBlue}
-      onPress={onPress}
-    >
-    </TouchableOpacity>
-  )
-}
-const ReservationListScreen = () => {
-  return (
-    <View>
-    <View style={styles.infoView}>
+    <ScrollView style={styles.rootView}>
+      <View style={styles.infoView}>
         <Text style={styles.infoViewTitle}>공지사항</Text>
         <Text style={styles.infoViewContent}>
-        ・ 추석 체육시설물 휴무 안내{'\n'}
-       ・ 배드민턴장 시설 보수 공지
-       </Text>
-    </View>
-    <View style={styles.listView}>
-      <Text style={styles.contentviewBlue}>
-        체육관
+          {noticeList?.map((el, i) => {
+            return `${i ? '\n' : ''}・ ${el.title}`
+          })}
         </Text>
       </View>
-      <View style={styles.listView}>
-      <Text style={styles.contentviewPurple}>
-        헬스장(체육관)                                       0  /   30
-        </Text>
-        </View>
-        <View style={styles.listView}>
-      <Text style={styles.contentviewBeige}>
-        테니스장                                                  0  /   8
-        </Text>
-      </View>
-          <View style={styles.listView}>
-      <Text style={styles.contentviewYellow}>
-          헬스장(기숙사)                                      12  /   40
-        </Text>
-      </View>
-      <View style={styles.listView}>
-      <Text style={styles.contentviewBlue}>
-          배드민턴                                                 4  /   8
-        </Text>
-      </View>
-    </View>
+
+      <View style={{ flex: 1, height: 1, backgroundColor: 'lightgray', margin: 20 }} />
+
+      {facilityList?.map((el, i) => {
+        const available = `${el.opening} ~ ${el.closing}`;
+        return (
+          <ListView
+            key={i}
+            color={colorRatation[i % 4]}
+            type={el.type} name={el.name}
+            location={el.location}
+            available={available}
+          />
+        )
+      })}
+    </ScrollView>
 
   );
 };
