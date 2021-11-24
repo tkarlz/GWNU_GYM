@@ -81,7 +81,7 @@ const GetHistory = (uid) => {
 
             for (const doc of collection.docs) {
                 const data = doc.data()
-                temp.push({ day: doc.id, time: data['time'], type: data['type'] })
+                temp.push({ day: doc.id, time: data['time'], name: data['name'] })
             }
             setHistory(temp)
         } catch {
@@ -133,14 +133,14 @@ const ReservationRegister = async (type, day, time, uid) => { // ('gym', '202111
 
     try {
         await db.runTransaction(async (tran) => {
-            const maximum = (await tran.get(dbRef)).data()['maximum']
+            const data = (await tran.get(dbRef)).data()
             const users = await Promise.all(time.map((el) => {
                 return tran.get(dbRef.collection(day).doc(el))
             }))
 
             for (const [i, t] of time.entries()) {
                 const timeRef = dbRef.collection(day).doc(t)
-                if (users[i].data() && users[i].data()['users'].length >= maximum) {
+                if (users[i].data() && users[i].data()['users'].length >= data['maximum']) {
                     throw new Error('Exceeded')
                 }
                 tran.set(
@@ -150,7 +150,7 @@ const ReservationRegister = async (type, day, time, uid) => { // ('gym', '202111
             }
             tran.set(
                 db.collection('Users').doc(uid).collection('history').doc(day),
-                { type: type, time: time }, { merge: true }
+                { type: type, name: data['name'], time: time }, { merge: true }
             )
         })
         return true
