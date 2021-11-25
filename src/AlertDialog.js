@@ -159,7 +159,7 @@ const DeleteAlert = ({ type, name, alertVisible, setAlertVisible }) => {
                             style={[fadeStyles.button, fadeStyles.buttonDelete]}
                             onPress={() => {
                                 console.log("delete")
-                                // RemoveFacility(type).then(() => { })  // Dangerous, for Testing..
+                                RemoveFacility(type).then(() => { })  // Dangerous
                                 setAlertVisible(false)
                             }} >
 

@@ -3,7 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 
 const db = firestore()
 
-const CreateFacility = async (name, location, maximum, info, openTime, closeTime) => {
+const CreateFacility = async (name, location, maximum, info, opening, closing) => {
     try {
         const temp = await db.collection('Reservation').where("name", "==", name).get()
         if (!temp.empty) throw new Error('Exist')
@@ -13,8 +13,8 @@ const CreateFacility = async (name, location, maximum, info, openTime, closeTime
             location: location,
             maximum: maximum,
             info: info,
-            openTime: openTime,
-            closeTime: closeTime
+            opening: opening,
+            closing: closing
         }, { merge: true })
 
         return true
