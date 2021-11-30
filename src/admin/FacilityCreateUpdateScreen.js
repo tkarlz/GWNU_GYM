@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker'
-import { CreateFacility } from '../../functions/AdminFirestore';
+import { CreateFacility, UpdateFacility } from '../../functions/AdminFirestore';
 import { GwnuBeige, LightenColor, TextColor } from '../../functions/GwnuColor';
 import Text from '../../functions/GwnuText'
 import { DefaultAlert } from '../AlertDialog';
@@ -82,8 +82,9 @@ const styles = StyleSheet.create({
   }
 })
 
-const FacilityCreateScreen = ({ navigation }) => {
+const FacilityCreateUpdateScreen = ({ route, navigation }) => {
   const [name, setName] = useState("")
+  const [type, setType] = useState("")
   const [locateId, setLocateId] = useState("")
   const [maximum, setMaximum] = useState("")
 
@@ -108,7 +109,7 @@ const FacilityCreateScreen = ({ navigation }) => {
     setState(text.replace(/\D/g, ""))
   }
 
-  const onPressAddButton = () => {
+  const onPressCreateButton = () => {
     if (name && locateId && maximum && detailInfo && openTime !== nullTime && closeTime !== nullTime) {
       CreateFacility(name, locateId, maximum, detailInfo, openTime, closeTime).then((res) => {
         if (res) {
@@ -122,10 +123,42 @@ const FacilityCreateScreen = ({ navigation }) => {
     }
   }
 
+  const onPressUpdateButton = () => {
+    if (name && locateId && maximum && detailInfo && openTime !== nullTime && closeTime !== nullTime) {
+      UpdateFacility(type, name, locateId, maximum, detailInfo, openTime, closeTime).then((res) => {
+        if (res) {
+          navigation.goBack()
+        } else {
+          setAlertVisible(true)
+        }
+      })
+    } else {
+      setEmptyError(true)
+    }
+  }
+
   useEffect(() => {
     const date = new Date()
-    date.setMinutes(date.getMinutes() < 30 ? 0 : 30)
+    date.setMinutes(date.getMinutes() < 30 ? 0 : 0)  // 1 hour interval
     setDate(date)
+
+    if (route.params?.info) {
+      navigation.setOptions({
+        title: "시설물 수정"
+      })
+
+      const { closing, info, location, maximum, name, opening, type } = route.params.info
+      setName(name)
+      setLocateId(location)
+      setMaximum(maximum.toString())
+      setOpenTime(opening)
+      setCloseTime(closing)
+      setDetailInfo(info)
+      setType(type)
+
+      date.setHours(parseInt(opening.slice(0, 2))+1)
+      setMinimumDate(date)
+    }
   }, [])
 
   return (
@@ -200,9 +233,14 @@ const FacilityCreateScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.addButton} onPress={onPressAddButton} >
-          <Text style={styles.addButtonText}>생성</Text>
-        </TouchableOpacity>
+        {route.params?.info ? 
+          <TouchableOpacity style={styles.addButton} onPress={onPressUpdateButton} >
+            <Text style={styles.addButtonText}>수정</Text>
+          </TouchableOpacity> :
+          <TouchableOpacity style={styles.addButton} onPress={onPressCreateButton} >
+            <Text style={styles.addButtonText}>생성</Text>
+          </TouchableOpacity>
+        }
       </View>
 
       {date && <DatePicker
@@ -218,28 +256,24 @@ const FacilityCreateScreen = ({ navigation }) => {
         onConfirm={(date) => {
           setDatePickerOpen(false)
           const hours = date.getHours().toString().padStart(2, '0')
-          const minutes = date.getMinutes() < 30 ? "00" : "30"
-          const newDate = new Date(date.getTime() + (60 * 60 * 1000))
+          date.setMinutes(date.getMinutes() < 30 ? 0 : 0) // 1 hour interval
+          const minutes = date.getMinutes() < 30 ? "00" : "00" // 1 hour interval
+          const minDate = new Date(date.getTime() + (60 * 60 * 1000))
 
           if (selectWhich === "close") {
             setDate(date)
             setCloseTime(`${hours}:${minutes}`)
           } else {
-            setDate(newDate)
-            setMinimumDate(newDate)
+            setDate(minDate)
+            setMinimumDate(minDate)
             setOpenTime(`${hours}:${minutes}`)
+            setCloseTime(nullTime)
             setSelectWhich("close")
             setDatePickerOpen(true)
           }
         }}
         onCancel={() => {
           setDatePickerOpen(false)
-          if (selectWhich === "close") {
-            setCloseTime(nullTime)
-          } else {
-            setOpenTime(nullTime)
-            setCloseTime(nullTime)
-          }
         }}
       />}
       <DefaultAlert
@@ -251,4 +285,4 @@ const FacilityCreateScreen = ({ navigation }) => {
   );
 };
 
-export default FacilityCreateScreen;
+export default FacilityCreateUpdateScreen;

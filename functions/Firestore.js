@@ -56,7 +56,9 @@ const GetFacilityList = () => {
                         name: data['name'],
                         location: data['location'],
                         opening: data['opening'],
-                        closing: data['closing']
+                        closing: data['closing'],
+                        info: data['info'],
+                        maximum: data['maximum']
                     })
                 }
                 setList(temp)

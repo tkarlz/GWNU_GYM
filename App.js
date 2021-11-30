@@ -6,7 +6,7 @@ import LoginScreen from './src/LoginScreen'
 import ReservationScreen from './src/ReservationScreen';
 import CommunityScreen from './src/CommunityScreen';
 import FacilityManageScreen from './src/admin/FacilityManageScreen';
-import FacilityCreateScreen from './src/admin/FacilityCreateScreen';
+import FacilityCreateUpdateScreen from './src/admin/FacilityCreateUpdateScreen';
 import CommunityManageScreen from './src/admin/CommunityManageScreen';
 
 const Stack = createNativeStackNavigator();
@@ -40,7 +40,7 @@ const App = () => {
         />
         <Stack.Screen
           name="시설물 추가"
-          component={FacilityCreateScreen}
+          component={FacilityCreateUpdateScreen}
         />
         <Stack.Screen
           name="커뮤니티 관리"

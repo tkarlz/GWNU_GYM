@@ -89,18 +89,18 @@ const FacilityManageScreen = ({ navigation }) => {
     })
   }, [editMode])
 
-  const ListView = ({ color, type, name }) => {
+  const ListView = ({ color, info }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         style={[styles.listView, { backgroundColor: color[0] }]}
         onPress={() => {
           setEditMode(false)
-          console.log(type)
+          navigation.navigate("시설물 추가", { info })
         }} >
 
         <Text style={[styles.listViewText, { color: color[1] }]}>
-          {name}
+          {info.name}
         </Text>
         <Ionicons name="chevron-forward-outline" style={[styles.listViewText, { color: color[1] }]} />
       </TouchableOpacity>
@@ -112,7 +112,7 @@ const FacilityManageScreen = ({ navigation }) => {
       {facilityList?.map((el, i) => {
         return (
           <View key={i} style={styles.listRootView}>
-            <ListView color={colorRatation[i % 4]} type={el.type} name={el.name} />
+            <ListView color={colorRatation[i % 4]} info={el} />
 
             {editMode ?
               <TouchableOpacity
