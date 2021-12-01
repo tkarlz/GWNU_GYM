@@ -72,21 +72,21 @@ const ReservationListScreen = ({ navigation }) => {
   const facilityList = GetFacilityList()
   const colorRatation = [[GwnuBlue, TextColorWhite], [GwnuPurple, TextColorWhite], [GwnuBeige, TextColor], [GwnuYellow, TextColor]]
 
-  const ListView = ({ color, type, name, location, available }) => {
+  const ListView = ({ color, info }) => {
+    const available = `${info.opening} ~ ${info.closing}`
+
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         style={[styles.listButton, { backgroundColor: color[0] }]}
-        onPress={() => navigation.navigate("예약하기", {
-          type: type, name: name
-        })} >
+        onPress={() => navigation.navigate("예약하기", { info })} >
 
         <View style={styles.listButtonView}>
           <Text style={[styles.listButtonTypeText, { color: color[1] }]}>
-            {name}
+            {info.name}
           </Text>
           <Text style={[styles.listButtonLocationText, { color: color[1] }]}>
-            {location}
+            {info.location}
           </Text>
         </View>
 
@@ -111,14 +111,11 @@ const ReservationListScreen = ({ navigation }) => {
       <View style={{ flex: 1, height: 1, backgroundColor: 'lightgray', margin: 20 }} />
 
       {facilityList?.map((el, i) => {
-        const available = `${el.opening} ~ ${el.closing}`;
         return (
           <ListView
             key={i}
             color={colorRatation[i % 4]}
-            type={el.type} name={el.name}
-            location={el.location}
-            available={available}
+            info={el}
           />
         )
       })}

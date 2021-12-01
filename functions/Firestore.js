@@ -94,11 +94,10 @@ const GetFacilityList = () => {
 
 const GetHistory = (uid) => {
     const [history, setHistory] = useState(null)
+    const dbRef = db.collection('Users').doc(uid).collection('history')
 
     useEffect(() => {
-        const subscriber = db.collection('Users').doc(uid).collection('history')
-            .orderBy(firestore.FieldPath.documentId()).onSnapshot(async (documentSnapshot) => {
-
+        const subscriber = dbRef.orderBy(firestore.FieldPath.documentId()).onSnapshot(async (documentSnapshot) => {
             try {
                 const temp = []
 
@@ -125,15 +124,7 @@ const ReservationInquiry = (type, day) => {  //  ('gym', '20211101')
     useEffect(() => {
         const subscriber = dbRef.collection(day).onSnapshot(async (documentSnapshot) => {
             try {
-                const info = (await dbRef.get()).data()
-                const temp = [{
-                    name: info['name'],
-                    location: info['location'],
-                    opening: info['opening'],
-                    closing: info['closing'],
-                    info: info['info'],
-                    maximum: info['maximum']
-                }]
+                const temp = []
 
                 for (const doc of documentSnapshot.docs) {
                     temp.push({ time: doc.id, num: doc.data()['users'].length })

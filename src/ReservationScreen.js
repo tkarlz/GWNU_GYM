@@ -27,10 +27,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   infoViewContent: {
-    minheight:40,
     backgroundColor: LightenColor,
     borderRadius: 5,
-    padding:5,
+    padding: 5,
     overflow: "hidden", // IOS
   },
   listButton: {
@@ -65,81 +64,69 @@ const styles = StyleSheet.create({
 })
 
 const ReservationScreen = ({ route, navigation }) => {
-  const { type } = route.params
-  const { name } = route.params
-  const Facility = GetFacilityList()
+  const { closing, info, location, maximum, name, opening, type } = route.params.info
+  const Facility = ReservationInquiry(type, '20211101')
+  console.log(Facility)
   const comm = GetCommunityList(type, 1)
 
-  const test = ReservationInquiry('health_gym', 'nXUvaSQdGQIRDQx4Aax4')
-  console.log(test)
   const [date, setDate] = useState(new Date())
   const [open, setOpen] = useState(false)
 
   const [toggleCheckBox, setToggleCheckBox] = useState(false)
-  
+
   return (
     <ScrollView style={styles.rootView}>
       <View style={styles.infoView}>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("커뮤니티", { type: type})}>
-         <Text style={styles.infoViewTitle}>커뮤니티</Text>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("커뮤니티", { type: type })}>
+          <Text style={styles.infoViewTitle}>커뮤니티</Text>
         </TouchableOpacity>
-        {comm && comm.map((el, i) => {
+        {comm?.map((el, i) => {
           return (
-            <Text style={styles.infoViewContent}>
+            <Text key={i} style={styles.infoViewContent}>
               {el.title}
-            </Text>           
+            </Text>
           )
-          })}
-          
-        </View>
-    
-      
-        {Facility && Facility.map((el) => {
-          if (el.type == type) {
-            return (
-              <View style={styles.infoView}>
-                <Text style={styles.infoViewTitle}>
-                  {el.name} 시설물 정보
-                </Text>
-                <Text style={styles.infoViewContent}>
-                  {el.info}
-                </Text>
-              </View>
-            )
-          }
-          })}
-       
-      {Facility && Facility.map((el) => {
-        
-        if (el.type == type) {
-          const timeshow = el.opening;
-          const Reservationtime=[];
-          return (
-            <View style={styles.infoView}>
+        })}
 
-              <Text style={styles.infoViewContent}>
-                {timeshow}
-                <CheckBox
+      </View>
+
+
+      <View style={styles.infoView}>
+        <Text style={styles.infoViewTitle}>
+          {name} 시설물 정보
+        </Text>
+        <Text style={styles.infoViewContent}>
+          {info}
+        </Text>
+      </View>
+
+      {Facility?.map((el, i) => {
+        const timeshow = el.opening;
+        const Reservationtime = [];
+        return (
+          <View key={i} style={styles.infoView}>
+
+            <Text style={styles.infoViewContent}>
+              {timeshow}
+              <CheckBox
                   disabled={false}
                   value={toggleCheckBox}
                   onValueChange={(newValue) => setToggleCheckBox(newValue)}
                 />                        
-                {console.log(Reservationtime)}
-              
-                
-              </Text>
-            </View>
-          
-          )  
-        }
+              {console.log(Reservationtime)}
+
+
+            </Text>
+          </View>
+        )
       })}
-      
+
       <View style={styles.infoView}>
         <TouchableOpacity activeOpacity={0.8} onPress={() => setOpen(true)} >
           <Text style={styles.infoViewContent}>
             {"날짜 입력"}
           </Text>
-        
+
           <DatePicker
             modal
             mode="date"
@@ -149,24 +136,24 @@ const ReservationScreen = ({ route, navigation }) => {
               setOpen(false)
               setDate(date)
               console.log(date)
-             //const datetest = date.getFullYear() + date.getMonth() date.getDay() )               
-              
+              //const datetest = date.getFullYear() + date.getMonth() date.getDay() )               
+
             }}
             onCancel={() => {
-            setOpen(false)
+              setOpen(false)
             }}
           />
-          
-           
+
+
         </TouchableOpacity>
 
-        
+
       </View>
       <TouchableOpacity style={styles.ReservationButton} activeOpacity={0.8}>
         <Text align='center'>예약</Text>
       </TouchableOpacity>
     </ScrollView>
-    
+
   );
 };
 
