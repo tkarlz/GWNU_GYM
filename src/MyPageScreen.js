@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { GetUserInfo } from '../functions/GoogleLogin'
 import Text from '../functions/GwnuText'
-import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor, TextColorWhite } from '../functions/GwnuColor'
-import { GetHistory } from '../functions/Firestore';
+import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor, TextColor, TextColorWhite } from '../functions/GwnuColor'
+import { GetHistory, GetUserDetailInfo } from '../functions/Firestore';
 import { CancelAlert } from './AlertDialog';
 
 const styles = StyleSheet.create({
@@ -24,12 +24,26 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   infoViewContent: {
-    fontSize: 18,
     minHeight: 75,
     backgroundColor: LightenColor,
     borderRadius: 5,
-    paddingHorizontal: 15,
-    paddingVertical: Platform.OS === 'ios' ? 25 : 15,
+    padding: 15,
+  },
+  textView: {
+    flexDirection: "row",
+    alignItems: "center",
+    margin: 5,
+  },
+  textFieldName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    width: 75,
+  },
+  textValue: {
+    flex: 1,
+    color: TextColor,
+    fontSize: 18,
+    padding: 0,
     overflow: "hidden", // IOS
   },
   reservationView: {
@@ -106,13 +120,28 @@ const styles = StyleSheet.create({
 
 const MyPageScreen = () => {
   const user = GetUserInfo()
+  const userInfo = GetUserDetailInfo(user?.uid)
   const historys = GetHistory(user?.uid)
 
   const [selectedHistory, setSelectedHistory] = useState(null)
   const [selectedDay, setSelectedDay] = useState(null)
   const [alertVisible, setAlertVisible] = useState(false)
 
-  const userData = [{ key: '이름', value: user?.displayName }, { key: '이메일', value: user?.email }]
+  const userData = [{ name: '이름', value: userInfo?.name }, { name: '이메일', value: userInfo?.email },
+   { name: '학과', value: userInfo?.department }, { name: '학번', value: userInfo?.studentId }]
+  const UserView = ({ name, value }) => {
+    return (
+      <View style={styles.textView}>
+        <Text style={styles.textFieldName} >{name}</Text>
+        <TextInput
+          editable={false}
+          selectTextOnFocus={false}
+          style={styles.textValue}
+          value={value ?? ""}
+        />
+      </View>
+    )
+  }
 
   const HistoryView = ({ history }) => {
     const date = new Date()
@@ -177,11 +206,11 @@ const MyPageScreen = () => {
     <ScrollView style={styles.rootView}>
       <View style={[styles.infoView, styles.shadow]}>
         <Text style={styles.infoViewTitle}>내 정보</Text>
-        <Text style={styles.infoViewContent}>
+        <View style={styles.infoViewContent}>
           {userData?.map((el, i) => {
-            return `${i ? '\n' : ''}${el.key} : ${el.value}`
+            return <UserView key={i} name={el.name} value={el.value} />
           })}
-        </Text>
+        </View>
       </View>
 
       <View style={{ flex: 1, height: 1, backgroundColor: 'lightgray', margin: 20 }} />

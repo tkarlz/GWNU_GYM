@@ -33,7 +33,7 @@ const MainScreen = ({ navigation }) => {
 
   return (
     <>
-      <LoginAlert alertVisible={alertVisible} setAlertVisible={setAlertVisible} navigation={navigation}/>
+      <LoginAlert alertVisible={alertVisible} setAlertVisible={setAlertVisible} navigation={navigation} />
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -54,12 +54,14 @@ const MainScreen = ({ navigation }) => {
         })}
       >
         <Tab.Screen name="예약" component={ReservationListScreen} options={{ headerShown: false }} />
-        {isAdmin?
+        {isAdmin ?
           <Tab.Screen name="관리자 페이지" component={AdminMainScreen} options={{ headerShown: false }} /> :
-          <Tab.Screen name="마이페이지" component={MyPageScreen} options={{ headerShown: false, tabBarButton: (props) => (
-            user ? <TouchableOpacity {...props} /> :
-            <TouchableOpacity {...props} onPress={() => setAlertVisible(true)} />
-          ) }} /> 
+          <Tab.Screen name="마이페이지" component={MyPageScreen} options={{
+            headerShown: false, tabBarButton: (props) => (
+              user ? <TouchableOpacity activeOpacity={1} {...props} /> :
+                <TouchableOpacity activeOpacity={1} {...props} onPress={() => setAlertVisible(true)} />
+            )
+          }} />
         }
       </Tab.Navigator>
     </>

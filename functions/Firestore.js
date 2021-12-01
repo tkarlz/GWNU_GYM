@@ -3,6 +3,25 @@ import firestore from '@react-native-firebase/firestore';
 
 const db = firestore()
 
+const GetUserDetailInfo = (uid) => {
+    const [info, setInfo] = useState(null)
+
+    const getData = async () => {
+        try {
+            const data = await db.collection('Users').doc(uid).get()
+            setInfo(data.data())
+        } catch {
+            setInfo(null)
+        }
+    }
+
+    useEffect(() => {
+        getData()
+    }, [uid])
+
+    return info
+}
+
 const IsAdmin = (uid) => {
     const [result, setResult] = useState(null)
 
@@ -264,6 +283,7 @@ const PostInCommunity = async (type, title, contents, uid) => {  // ('gym', 'tit
 }
 
 export {
+    GetUserDetailInfo,
     IsAdmin,
     GetInfo,
     GetFacilityList,
