@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import Text from '../fuctions/GwnuText'
-import { LoginConfigure, LoginButton } from '../fuctions/GoogleLogin'
+import Text from '../functions/GwnuText'
+import { LoginConfigure, LoginButton } from '../functions/GoogleLogin'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor } from '../fuctions/GwnuColor'
+import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor } from '../functions/GwnuColor'
 
 const styles = StyleSheet.create({
   rootView: {

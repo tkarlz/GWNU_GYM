@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Text from '../functions/GwnuText'
 import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor } from '../functions/GwnuColor'
-import { GetCommunityList} from '../functions/Firestore';
+import { GetCommunityList, GetCommunityContents} from '../functions/Firestore';
 
 const styles = StyleSheet.create({
     rootView: {
@@ -53,25 +53,29 @@ const styles = StyleSheet.create({
 
 const CommunityScreen = ({ route, navigation }) => {
     const { type } = route.params;
-    const { title } = route.params;
     const comm = GetCommunityList(type)
-   
     return (
+    
         <View>           
            
             {comm && comm.map((el, i) => {
-                if (title == el.title) {
-                    return (<View style={styles.infoView}>
-                        <Text style={styles.infoViewTitle}>{el.title}</Text>
-                        <Text style={styles.infoViewContent}>
-                            {el.contents}
-                        </Text>
-                        <Text style={styles.infoViewContent}>
-                            {el.date}
-                        </Text>
-                    </View>
+                
+                Getcontents.map((a) => {
+                    console.log()
+                    return (
+                        <View style={styles.infoView}>
+                            <Text style={styles.infoViewTitle}>{el.title}</Text>
+
+                            <Text style={styles.infoViewContent}>
+                                {console.log(a.contents)}
+                            </Text>
+                            <Text style={styles.infoViewContent}>
+                                {el.date}
+                            </Text>
+                        </View>
                     )
-                }
+                })
+                
             })}
     </View>
     );

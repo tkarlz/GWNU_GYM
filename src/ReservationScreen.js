@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { TextInput, View, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import React, { useEffect, useState, } from 'react';
+import { TextInput, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Text from '../functions/GwnuText'
 import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor } from '../functions/GwnuColor'
-import { GetCommunityList, GetFacilityList } from '../functions/Firestore';
-import DateTimePicker from '@react-native-community/datetimepicker'
-
+import { GetCommunityList, GetFacilityList, ReservationInquiry } from '../functions/Firestore';
+import DatePicker from 'react-native-date-picker'
+import CheckBox from '@react-native-community/checkbox';
 const styles = StyleSheet.create({
   rootView: {
     flex: 1
@@ -67,52 +67,34 @@ const styles = StyleSheet.create({
 const ReservationScreen = ({ route, navigation }) => {
   const { type } = route.params
   const { name } = route.params
-  const Facilityinfo = GetFacilityList()
-  const comm = GetCommunityList(type)
- 
+  const Facility = GetFacilityList()
+  const comm = GetCommunityList(type, 1)
 
+  const test = ReservationInquiry('health_gym', 'nXUvaSQdGQIRDQx4Aax4')
+  console.log(test)
+  const [date, setDate] = useState(new Date())
+  const [open, setOpen] = useState(false)
 
-
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-  };
-
+  const [toggleCheckBox, setToggleCheckBox] = useState(false)
   
-
   return (
     <ScrollView style={styles.rootView}>
-        <View style={styles.infoView}>
+      <View style={styles.infoView}>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("커뮤니티", { type: type})}>
          <Text style={styles.infoViewTitle}>커뮤니티</Text>
-          
+        </TouchableOpacity>
         {comm && comm.map((el, i) => {
-            const title = el.title
-            return (<TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("커뮤니티", {type: type, title: title})
-            }>
-              <Text style={styles.infoViewContent}>
-                {el.title}
-              </Text>
-            </TouchableOpacity>)
+          return (
+            <Text style={styles.infoViewContent}>
+              {el.title}
+            </Text>           
+          )
           })}
           
         </View>
     
       
-        {Facilityinfo && Facilityinfo.map((el) => {
+        {Facility && Facility.map((el) => {
           if (el.type == type) {
             return (
               <View style={styles.infoView}>
@@ -127,24 +109,55 @@ const ReservationScreen = ({ route, navigation }) => {
           }
           })}
        
-      
+      {Facility && Facility.map((el) => {
+        
+        if (el.type == type) {
+          const timeshow = el.opening;
+          const Reservationtime=[];
+          return (
+            <View style={styles.infoView}>
+
+              <Text style={styles.infoViewContent}>
+                {timeshow}
+                <CheckBox
+                  disabled={false}
+                  value={toggleCheckBox}
+                  onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                />                        
+                {console.log(Reservationtime)}
+              
+                
+              </Text>
+            </View>
+          
+          )  
+        }
+      })}
       
       <View style={styles.infoView}>
-        <TouchableOpacity activeOpacity={0.8} onPress={showDatepicker} >
+        <TouchableOpacity activeOpacity={0.8} onPress={() => setOpen(true)} >
           <Text style={styles.infoViewContent}>
             {"날짜 입력"}
           </Text>
         
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="calendar"
-              onChange={onChange}
-            />
-          )}
+          <DatePicker
+            modal
+            mode="date"
+            open={open}
+            date={date}
+            onConfirm={(date) => {
+              setOpen(false)
+              setDate(date)
+              console.log(date)
+             //const datetest = date.getFullYear() + date.getMonth() date.getDay() )               
+              
+            }}
+            onCancel={() => {
+            setOpen(false)
+            }}
+          />
+          
+           
         </TouchableOpacity>
 
         
