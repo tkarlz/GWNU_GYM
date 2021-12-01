@@ -76,24 +76,25 @@ const GetFacilityList = () => {
 const GetHistory = (uid) => {
     const [history, setHistory] = useState(null)
 
-    const getData = async () => {
-        try {
-            const collection = await db.collection('Users').doc(uid).collection('history').get()
-            const temp = []
-
-            for (const doc of collection.docs) {
-                const data = doc.data()
-                temp.push({ day: doc.id, time: data['time'], name: data['name'] })
-            }
-            setHistory(temp)
-        } catch {
-            setHistory(null)
-        }
-    }
-
     useEffect(() => {
-        getData()
-    }, [])
+        const subscriber = db.collection('Users').doc(uid).collection('history')
+            .orderBy(firestore.FieldPath.documentId()).onSnapshot(async (documentSnapshot) => {
+
+            try {
+                const temp = []
+
+                for (const doc of documentSnapshot.docs) {
+                    const data = doc.data()
+                    temp.unshift({ day: doc.id, time: data['time'], name: data['name'], type: data['type'] })
+                }
+                setHistory(temp)
+            } catch {
+                setHistory(null)
+            }
+        });
+
+        return () => subscriber();
+    }, [uid])
 
     return history
 }
