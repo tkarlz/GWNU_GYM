@@ -5,6 +5,7 @@ import Text from "../functions/GwnuText";
 import { GwnuPurple, TextColorWhite } from "../functions/GwnuColor";
 import { LoginButton } from './HeaderComponent'
 import { RemoveFacility } from "../functions/AdminFirestore";
+import { ReservationCancel } from "../functions/Firestore";
 
 const slideStyles = StyleSheet.create({
     centeredView: {
@@ -158,8 +159,7 @@ const DeleteAlert = ({ type, name, alertVisible, setAlertVisible }) => {
                             activeOpacity={0.8}
                             style={[fadeStyles.button, fadeStyles.buttonDelete]}
                             onPress={() => {
-                                console.log("delete")
-                                // RemoveFacility(type).then(() => { })  // Dangerous, for Testing..
+                                RemoveFacility(type).then(() => { })  // Dangerous
                                 setAlertVisible(false)
                             }} >
 
@@ -202,8 +202,55 @@ const DefaultAlert = ({ message, alertVisible, setAlertVisible }) => {
     );
 };
 
+const CancelAlert = ({ history, day, uid, alertVisible, setAlertVisible }) => {
+
+    return (
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={alertVisible}
+            onRequestClose={() => setAlertVisible(false)}
+        >
+            <TouchableOpacity
+                style={fadeStyles.centeredView}
+                activeOpacity={0}
+                onPress={() => setAlertVisible(false)}>
+
+                <View style={fadeStyles.background} />
+
+                <View style={fadeStyles.modalView}>
+                    <Text style={[fadeStyles.modalText, fadeStyles.modalSelectedName]}>{`" ${day} "`}</Text>
+                    <Text style={[fadeStyles.modalText, fadeStyles.modalSelectedName]}>{`" ${history?.name} "`}</Text>
+                    <Text style={fadeStyles.modalText}>정말 취소하시겠습니까?</Text>
+
+                    <View style={fadeStyles.buttonView}>
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            style={[fadeStyles.button, fadeStyles.buttonDelete]}
+                            onPress={() => {
+                                ReservationCancel(history.type, history.day, history.time, uid).then(() => { })
+                                setAlertVisible(false)
+                            }} >
+
+                            <Text style={[fadeStyles.buttonText, fadeStyles.buttonTextDelete]}>취소</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            style={[fadeStyles.button, fadeStyles.buttonCancel]}
+                            onPress={() => setAlertVisible(false)} >
+
+                            <Text style={fadeStyles.buttonText}>닫기</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        </Modal>
+    );
+};
+
 export {
     LoginAlert,
     DeleteAlert,
-    DefaultAlert
+    DefaultAlert,
+    CancelAlert
 }
