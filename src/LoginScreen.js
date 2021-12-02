@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import Text from '../functions/GwnuText'
 import { LoginConfigure, GetUserInfo, LoginButton } from '../functions/GoogleLogin'
 import { GetInfo } from '../functions/Firestore'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import { GwnuBeige, GwnuYellow, LightenColor, TextColorWhite } from '../functions/GwnuColor'
+import { DefaultAlert } from './AlertDialog';
 
 const styles = StyleSheet.create({
   rootView: {
@@ -62,12 +63,17 @@ const LoginScreen = ({ navigation }) => {
   const user = GetUserInfo()
   const usage = GetInfo('usage')
 
+  const [alertVisible, setAlertVisible] = useState(false)
+
   useEffect(() => {
     LoginConfigure()
   }, [])
 
   useEffect(() => {
-    if (user) navigation.goBack()
+    if (user) {
+      if (user.email.match(/.*@gwnu.ac.kr$/i)) navigation.goBack()
+      else setAlertVisible(true)
+    }
   }, [user])
 
   return (
@@ -90,6 +96,12 @@ const LoginScreen = ({ navigation }) => {
         </Text>
         <LoginButton />
       </View>
+
+      <DefaultAlert
+        message="학교 구글 계정이 아닙니다."
+        alertVisible={alertVisible}
+        setAlertVisible={setAlertVisible}
+      />
     </View>
   );
 };

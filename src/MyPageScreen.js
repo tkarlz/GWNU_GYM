@@ -180,7 +180,7 @@ const MyPageScreen = () => {
               onPress={() => {
                 setSelectedHistory(history)
                 setSelectedDay(historyDay)
-                if (currentTime >= history.day + history.time[0]) return
+                if (user === undefined && currentTime >= history.day + history.time[0]) return
                 setAlertVisible(true)
               }}>
 

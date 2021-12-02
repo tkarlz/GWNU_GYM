@@ -17,7 +17,7 @@ const SignIn = async () => {
 
     const user = firebase.auth().currentUser
     console.log(user) // for Testing..
-    if (user) {
+    if (user?.email.match(/.*@gwnu.ac.kr$/i)) {
       const data = {
         name: user.displayName,
         email: user.email,
@@ -27,6 +27,12 @@ const SignIn = async () => {
       };
 
       await firestore().collection('Users').doc(user.uid).set(data, { merge: true });
+    } else {
+      user.reauthenticateWithCredential(googleCredential)
+      await user.delete()
+
+      await GoogleSignin.revokeAccess()
+      await firebase.auth().signOut()
     }
 
   } catch (error) {
@@ -61,6 +67,8 @@ const GetUserInfo = () => {
 
 const SignOut = async () => {
   try {
+    LoginConfigure()// for Testing..
+    await GoogleSignin.revokeAccess()// for Testing..
     await firebase.auth().signOut()
   } catch (e) {
     // signout error

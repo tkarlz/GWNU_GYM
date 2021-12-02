@@ -7,6 +7,7 @@ const GetUserDetailInfo = (uid) => {
     const [info, setInfo] = useState(null)
 
     const getData = async () => {
+        if (uid === undefined) return
         try {
             const data = await db.collection('Users').doc(uid).get()
             setInfo(data.data())
@@ -97,6 +98,7 @@ const GetHistory = (uid) => {
     const dbRef = db.collection('Users').doc(uid).collection('history')
 
     useEffect(() => {
+        if (uid === undefined) return
         const subscriber = dbRef.orderBy(firestore.FieldPath.documentId()).onSnapshot(async (documentSnapshot) => {
             try {
                 const temp = []

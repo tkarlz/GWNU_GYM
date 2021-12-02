@@ -33,6 +33,9 @@ const slideStyles = StyleSheet.create({
         shadowRadius: 10, //IOS
         elevation: 5, // Android
     },
+    modalViewLarge: {
+        paddingHorizontal: 20,
+    },
     modalText: {
         fontSize: 20,
         margin: 10,
@@ -119,7 +122,7 @@ const LoginAlert = ({ alertVisible, setAlertVisible, navigation }) => {
         >
             <TouchableOpacity
                 style={[slideStyles.centeredView, { marginBottom: 40 + insets.bottom }]}
-                activeOpacity={0}
+                activeOpacity={1}
                 onPress={() => setAlertVisible(false)}>
 
                 <View style={slideStyles.modalView}>
@@ -145,7 +148,7 @@ const DeleteAlert = ({ type, name, alertVisible, setAlertVisible }) => {
         >
             <TouchableOpacity
                 style={fadeStyles.centeredView}
-                activeOpacity={0}
+                activeOpacity={1}
                 onPress={() => setAlertVisible(false)}>
 
                 <View style={fadeStyles.background} />
@@ -191,10 +194,10 @@ const DefaultAlert = ({ message, alertVisible, setAlertVisible }) => {
         >
             <TouchableOpacity
                 style={[slideStyles.centeredView, { marginBottom: 40 + insets.bottom }]}
-                activeOpacity={0}
+                activeOpacity={1}
                 onPress={() => setAlertVisible(false)}>
 
-                <View style={slideStyles.modalView}>
+                <View style={[slideStyles.modalView, slideStyles.modalViewLarge]}>
                     <Text style={slideStyles.modalText}>{message}</Text>
                 </View>
             </TouchableOpacity>
@@ -213,7 +216,7 @@ const CancelAlert = ({ history, day, uid, alertVisible, setAlertVisible }) => {
         >
             <TouchableOpacity
                 style={fadeStyles.centeredView}
-                activeOpacity={0}
+                activeOpacity={1}
                 onPress={() => setAlertVisible(false)}>
 
                 <View style={fadeStyles.background} />
