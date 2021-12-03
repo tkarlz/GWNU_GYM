@@ -3,6 +3,30 @@ import firestore from '@react-native-firebase/firestore';
 
 const db = firestore()
 
+const CheckUserInfo = (uid) => {
+    const [result, setResult] = useState(null)
+
+    const getData = async () => {
+        if (uid === undefined) return
+        try {
+            const user = await db.collection('Users').doc(uid).get()
+            const data = user.data()
+            setResult({
+                isAdmin: data['admin'] ?? false,
+                isBlankInfo: data['studentId'] ? false : true
+            })
+        } catch {
+            setResult(null)
+        }
+    }
+
+    useEffect(() => {
+        getData()
+    }, [uid])
+
+    return result
+}
+
 const GetUserDetailInfo = (uid) => {
     const [info, setInfo] = useState(null)
 
@@ -23,23 +47,17 @@ const GetUserDetailInfo = (uid) => {
     return info
 }
 
-const IsAdmin = (uid) => {
-    const [result, setResult] = useState(null)
+const UpdateUserDetailInfo = async (uid, department, studentId) => {
+    try {
+        await db.collection('Users').doc(uid).update({
+            department: department,
+            studentId: studentId
+        })
 
-    const getData = async () => {
-        try {
-            const data = await db.collection('Users').doc(uid).get()
-            setResult(data.data()['admin'] ?? null)
-        } catch {
-            setResult(null)
-        }
+        return true
+    } catch {
+        return false
     }
-
-    useEffect(() => {
-        getData()
-    }, [uid])
-
-    return result
 }
 
 const GetInfo = (type) => {
@@ -276,8 +294,9 @@ const PostInCommunity = async (type, title, contents, uid) => {  // ('gym', 'tit
 }
 
 export {
+    CheckUserInfo,
     GetUserDetailInfo,
-    IsAdmin,
+    UpdateUserDetailInfo,
     GetInfo,
     GetFacilityList,
     GetHistory,

@@ -220,6 +220,11 @@ const MyPageScreen = () => {
         {historys?.map((el, i) => {
           return <HistoryView key={i} history={el} />
         })}
+        {historys?.length === 0 ?
+          <View style={styles.reservationViewContent}>
+            <Text>예약 내역이 없습니다.</Text>
+          </View> : null
+        }
       </View>
 
       {user && <CancelAlert

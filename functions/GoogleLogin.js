@@ -28,11 +28,14 @@ const SignIn = async () => {
 
       await firestore().collection('Users').doc(user.uid).set(data, { merge: true });
     } else {
-      user.reauthenticateWithCredential(googleCredential)
-      await user.delete()
+      try {
+        await user.delete()
+      } catch {
+        await user.reauthenticateWithCredential(googleCredential)
+        await user.delete()
+      }
 
       await GoogleSignin.revokeAccess()
-      await firebase.auth().signOut()
     }
 
   } catch (error) {
