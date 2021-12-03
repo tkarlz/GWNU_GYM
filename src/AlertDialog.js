@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, StyleSheet, View, TouchableOpacity, Dimensions, TextInput } from "react-native";
+import { Modal, StyleSheet, View, TouchableOpacity, Dimensions, TextInput, KeyboardAvoidingView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Text from "../functions/GwnuText";
 import { GwnuPurple, GwnuYellow, TextColor, TextColorWhite } from "../functions/GwnuColor";
@@ -293,7 +293,7 @@ const CancelAlert = ({ history, day, uid, alertVisible, setAlertVisible }) => {
 
 const InfoInputAlert = ({ uid, alertVisible, setAlertVisible }) => {
     const insets = useSafeAreaInsets()
-    
+
     const [department, setDepartment] = useState("")
     const [studentId, setStudentId] = useState("")
     const [emptyError, setEmptyError] = useState(false)
@@ -330,48 +330,51 @@ const InfoInputAlert = ({ uid, alertVisible, setAlertVisible }) => {
 
                 <View style={fadeStyles.background} />
 
-                <View style={[fadeStyles.modalView, fadeStyles.borderColorPurple]}>
-                    <Text style={fadeStyles.modalText}>추가 정보 입력</Text>
-                    <Text style={[fadeStyles.modalTextSmall, fadeStyles.textColorRed]}>
-                        입력된 정보는 변경할 수 없으니,{'\n'}정확히 입력해 주세요.
-                    </Text>
-
-                    <View style={fadeStyles.textView}>
-                        <Text style={fadeStyles.textFieldName} >학과</Text>
-                        <TextInput
-                            style={fadeStyles.textInput}
-                            onChangeText={(text) => checkText(setDepartment, text)}
-                            value={department}
-                            placeholder="ex) 컴퓨터공학과"
-                        />
-                    </View>
-                    <View style={fadeStyles.textView}>
-                        <Text style={fadeStyles.textFieldName} >학번</Text>
-                        <TextInput
-                            style={fadeStyles.textInput}
-                            onChangeText={(text) => checkNumber(setStudentId, text)}
-                            value={studentId}
-                            keyboardType="numeric"
-                            placeholder="ex) 20210000"
-                        />
-                    </View>
-
-                    <View>
-                        <Text style={[fadeStyles.errorText, emptyError ? null : { display: "none" }]}>
-                            내용을 모두 입력해 주세요.
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                    <View style={[fadeStyles.modalView, fadeStyles.borderColorPurple]}>
+                        <Text style={fadeStyles.modalText}>추가 정보 입력</Text>
+                        <Text style={[fadeStyles.modalTextSmall, fadeStyles.textColorRed]}>
+                            입력된 정보는 변경할 수 없으니,{'\n'}정확히 입력해 주세요.
                         </Text>
-                    </View>
 
-                    <View style={fadeStyles.buttonView}>
-                        <TouchableOpacity
-                            activeOpacity={0.8}
-                            style={[fadeStyles.button, fadeStyles.backgroundYellow]}
-                            onPress={onPressInputButton} >
+                        <View style={fadeStyles.textView}>
+                            <Text style={fadeStyles.textFieldName} >학과</Text>
+                            <TextInput
+                                style={fadeStyles.textInput}
+                                onChangeText={(text) => checkText(setDepartment, text)}
+                                value={department}
+                                placeholder="ex) 컴퓨터공학과"
+                            />
+                        </View>
+                        <View style={fadeStyles.textView}>
+                            <Text style={fadeStyles.textFieldName} >학번</Text>
+                            <TextInput
+                                style={fadeStyles.textInput}
+                                onChangeText={(text) => checkNumber(setStudentId, text)}
+                                value={studentId}
+                                keyboardType="numeric"
+                                placeholder="ex) 20210000"
+                            />
+                        </View>
 
-                            <Text style={[fadeStyles.buttonText, fadeStyles.textColorWhite]}>입력</Text>
-                        </TouchableOpacity>
+                        <View>
+                            <Text style={[fadeStyles.errorText, emptyError ? null : { display: "none" }]}>
+                                내용을 모두 입력해 주세요.
+                            </Text>
+                        </View>
+
+                        <View style={fadeStyles.buttonView}>
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                style={[fadeStyles.button, fadeStyles.backgroundYellow]}
+                                onPress={onPressInputButton} >
+
+                                <Text style={[fadeStyles.buttonText, fadeStyles.textColorWhite]}>입력</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
+                </KeyboardAvoidingView>
             </TouchableOpacity>
         </Modal>
     );

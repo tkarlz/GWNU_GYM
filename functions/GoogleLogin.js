@@ -70,8 +70,6 @@ const GetUserInfo = () => {
 
 const SignOut = async () => {
   try {
-    LoginConfigure()// for Testing..
-    await GoogleSignin.revokeAccess()// for Testing..
     await firebase.auth().signOut()
   } catch (e) {
     // signout error
