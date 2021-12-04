@@ -156,7 +156,7 @@ const ReservationInquiry = (type, day) => {  //  ('gym', '20211101')
         });
 
         return () => subscriber();
-    }, [])
+    }, [day])
 
     return reservation
 }
