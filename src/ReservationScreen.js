@@ -1,11 +1,11 @@
 import React, { useEffect, useState, Component } from 'react';
-import { TextInput, View, StyleSheet, TouchableOpacity, ScrollView, Modal, Alert } from 'react-native';
+import { TextInput, View, StyleSheet, TouchableOpacity, TouchableHighlight, ScrollView, Button, Alert } from 'react-native';
 import Text from '../functions/GwnuText'
 import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor } from '../functions/GwnuColor'
-import { GetCommunityList, GetFacilityList, ReservationInquiry, ReservationRegister } from '../functions/Firestore';
+import { GetCommunityList, GetFacilityList, ReservationInquiry, ReservationRegister, } from '../functions/Firestore';
 import DatePicker from 'react-native-date-picker'
 import CheckBox from '@react-native-community/checkbox';
-import { Button } from 'react-native-paper';
+import { GetUserInfo } from '../functions/GoogleLogin'
 
 const styles = StyleSheet.create({
   rootView: {
@@ -87,30 +87,30 @@ const styles = StyleSheet.create({
     padding: 5,
     overflow: "hidden", // IOS
   },
-  modalView: {
-    width: 300,
-    height: 100,
+  Buttonstyle: {
+    width: 90,
+    height: 45,
     borderRadius: 5,
+    backgroundColor: GwnuYellow,
+    alignItems: 'center'
   }
 })
 
-
-
+let boolean = new Array(12)
+boolean.fill(0)
+console.log(boolean)
 const ReservationScreen = ({ route, navigation }) => {
   const { type } = route.params
   const { name } = route.params
   const { info } = route.params
   const Facility = GetFacilityList()
   const comm = GetCommunityList(info.type, 1)
-
+  const user = GetUserInfo()
+  const userid = user?.uid
   const [date, setDate] = useState(new Date())
   const [open, setOpen] = useState(false)
-
-  let [checked, setcheck] = useState(false)
-
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const [currentTime, setcurrentTime] = useState(Date())
+  const today = new Date()
+  const [currentTime, setcurrentTime] = useState(`${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`)
 
   const test = ReservationInquiry(info.type, currentTime)
 
@@ -118,18 +118,17 @@ const ReservationScreen = ({ route, navigation }) => {
   const endTime = info.closing.replace(":", "")
 
 
-  let iteration = []
-  let boolean = []
+  const iteration = []
 
+  const temp = []
   let showtime = Number(startTime)
   let j = (Number(endTime) - Number(startTime)) / 100
 
   for (let i = 0; i < j; i++) {
     iteration[i] = showtime
     showtime += 100
-    boolean[i] = false
-  }
 
+  }
   return (
     <ScrollView style={styles.rootView}>
 
@@ -186,8 +185,12 @@ const ReservationScreen = ({ route, navigation }) => {
               setOpen(false)
             }}
           />
+
         </TouchableOpacity>
         {iteration && iteration.map((time, i) => {
+
+          let [boolText, setText] = useState(1);
+
           let inwon = info.maximum
 
           {
@@ -204,27 +207,35 @@ const ReservationScreen = ({ route, navigation }) => {
             })
           }
 
+
+
           return (
-            <View style={styles.infoView}>
+
+            <View key={i} style={styles.infoView}>
               <Text style={styles.infoViewContent}>
                 {time / 100} 시{'\n'}
                 예약가능인원 : {inwon} {'\n'}
-
-                {//여기가 문제 value 값을 어떻게 줘야할지 모르겟음
-                }
-                <CheckBox
-                  disabled={false}
-                  onAnimationType='fill'
-                  offAnimationType='fade'
-                  value={boolean[i]}
-                  onValueChange={(newValue) => {
-                    boolean[i] = newValue
-                    console.log(boolean, (time.toString().padStart(4, '0')))
-
-                  }}
-                />
-
               </Text>
+              <TouchableOpacity
+                style={styles.Buttonstyle}
+                onPress={() => {
+                  if (boolean[i] == 0) {
+                    boolean[i]++
+                  } else if (boolean[i] == 1) {
+                    boolean[i]--
+                  }
+                  setText(boolText ^ 1)
+
+                  console.log(boolean, boolText)
+                }}
+
+              >
+                <Text >
+                  {boolText ? '선택' : '취소'}
+                </Text>
+
+              </TouchableOpacity>
+
             </View>
           )
 
@@ -236,28 +247,38 @@ const ReservationScreen = ({ route, navigation }) => {
       </View>
       <TouchableOpacity style={styles.ReservationButton} activeOpacity={0.8}
         onPress={() => {
-          console.log(info.type, currentTime, startTime, endTime) //임시로 startTime endTime넣어둠
+          while (temp.length) {
+            temp.pop()
+          }
+          boolean.map((el, i) => {
+
+            if (el == 1) {
+              temp.push(iteration[i].toString().padStart(4, '0'))
+            }
+          })
 
           return (
             Alert.alert(
               "아래 정보로 예약 하시겠습니까?",
-              (info.name + ' ' + currentTime + ' ' + startTime + ' ' + endTime),
+              (info.name + ' ' + currentTime + ' ' + temp),
+
               [{
                 text: "예",
                 onPress: () => {
-                  //ReservationRegister(info.type, currentTime, [startTime, endTime], 'DUg7F0fQOebs3thMmeS9p56b2b53')
+                  ReservationRegister(info.type, currentTime, temp, userid)
                 }
               },
               {
-                text: "아니오",
-                style: "cancel"
+                text: "다시 선택",
+                style: "cancel",
+
               }]
             )
           )
         }}>
         <Text align='center'>예약</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </ScrollView >
 
   );
 };
