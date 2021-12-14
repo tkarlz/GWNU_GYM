@@ -54,8 +54,43 @@ const RemoveFacility = async (type) => {
     }
 }
 
+const AdminReservationInquiry = (type, day) => {  //  ('gym', '20211101')
+    const [reservation, setReservation] = useState(null)
+    const dbRef = db.collection('Reservation').doc(type)
+
+    useEffect(() => {
+        if (day === undefined) return
+        const subscriber = dbRef.collection(day).onSnapshot(async (documentSnapshot) => {
+            try {
+                const temp = []
+
+                for (const doc of documentSnapshot.docs) {
+                    const users = doc.data()['users']
+                    const rawUsersInfo = await Promise.all(users.map((el) => {
+                        try {
+                            return el.get()
+                        } catch {
+                            return false
+                        }
+                    }))
+                    const usersInfo = rawUsersInfo.filter(el => el).map(el => el.data())
+                    temp.push({ time: doc.id, num: users.length, users: usersInfo })
+                }
+                setReservation(temp)
+            } catch {
+                setReservation(null)
+            }
+        });
+
+        return () => subscriber();
+    }, [day])
+
+    return reservation
+}
+
 export {
     CreateFacility,
     UpdateFacility,
     RemoveFacility,
+    AdminReservationInquiry,
 }

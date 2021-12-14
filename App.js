@@ -10,6 +10,7 @@ import FacilityManageScreen from './src/admin/FacilityManageScreen';
 import FacilityCreateUpdateScreen from './src/admin/FacilityCreateUpdateScreen';
 import CommunityManageScreen from './src/admin/CommunityManageScreen';
 import ReservationManageScreen from './src/admin/ReservationManageScreen';
+import ReservationInfoScreen from './src/admin/ReservationInfoScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,10 @@ const App = () => {
         <Stack.Screen
           name="예약 관리"
           component={ReservationManageScreen}
+        />
+        <Stack.Screen
+          name="예약 정보 확인"
+          component={ReservationInfoScreen}
         />
         <Stack.Screen
           name="시설물 관리"

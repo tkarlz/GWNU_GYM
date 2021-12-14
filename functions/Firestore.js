@@ -142,6 +142,7 @@ const ReservationInquiry = (type, day) => {  //  ('gym', '20211101')
     const dbRef = db.collection('Reservation').doc(type)
 
     useEffect(() => {
+        if (day === undefined) return
         const subscriber = dbRef.collection(day).onSnapshot(async (documentSnapshot) => {
             try {
                 const temp = []
