@@ -4,7 +4,6 @@ import Text from '../functions/GwnuText'
 import { GwnuBeige, GwnuBlue, GwnuPurple, GwnuYellow, LightenColor } from '../functions/GwnuColor'
 import { GetCommunityList, GetFacilityList, ReservationInquiry, ReservationRegister, } from '../functions/Firestore';
 import DatePicker from 'react-native-date-picker'
-import CheckBox from '@react-native-community/checkbox';
 import { GetUserInfo } from '../functions/GoogleLogin'
 
 const styles = StyleSheet.create({

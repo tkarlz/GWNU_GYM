@@ -6,7 +6,7 @@ const CommunityManageScreen = () => {
 
   return (
     <View>
-        <Text>커뮤니티 관리</Text>
+      <Text>커뮤니티 관리</Text>
     </View>
   );
 };

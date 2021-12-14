@@ -16,7 +16,7 @@ const SignIn = async () => {
     await firebase.auth().signInWithCredential(googleCredential);
 
     const user = firebase.auth().currentUser
-    console.log(user) // for Testing..
+    
     if (user?.email.match(/.*@gwnu.ac.kr$/i)) {
       const data = {
         name: user.displayName,
