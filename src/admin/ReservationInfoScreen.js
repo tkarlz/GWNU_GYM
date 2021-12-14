@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: GwnuBlue,
     borderRadius: 5,
     marginHorizontal: 30,
-    marginBottom: 30,
+    marginBottom: 40,
     padding: 5,
   },
   mainViewHeader: {
@@ -113,23 +113,21 @@ const ReservationInfoScreen = ({ route }) => {
         <Text style={styles.listViewText}>{section[0]} ~ {section[1]}</Text>
         <Text style={styles.listViewText}>{section[2]}/{maximum}</Text>
       </View>
-    );
-  };
+    )
+  }
 
   const renderContent = (section) => {
-    return (
-      section[3]?.map((item, i) => {
-        return (
-          <View key={i} style={styles.innerView}>
-            <Text style={styles.innerViewText}>
-              ・ {item.name} / {item.department} / {item.studentId}
-              {'\n        '}{item.email}
-            </Text>
-          </View>
-        )
-      })
-    );
-  };
+    return section[3]?.map((item, i) => {
+      return (
+        <View key={i} style={styles.innerView}>
+          <Text style={styles.innerViewText}>
+            ・ {item.name} / {item.department} / {item.studentId}
+            {'\n        '}{item.email}
+          </Text>
+        </View>
+      )
+    })
+  }
 
   useEffect(() => {
     setShowDate(`${date.getFullYear()}년 ${(date.getMonth() + 1).toString().padStart(2, '0')}월 ` +
