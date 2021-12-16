@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { StatusBar, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ReservationListScreen from './ReservationListScreen'
@@ -24,6 +24,7 @@ const MainScreen = ({ navigation }) => {
     navigation.setOptions({
       headerTitle: () => <LogoTitle />
     })
+    Platform.OS === 'ios' ? StatusBar.setBarStyle("dark-content") : null
   }, [])
 
   useEffect(() => {
